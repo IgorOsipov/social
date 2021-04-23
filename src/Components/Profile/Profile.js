@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components'
+import MyPosts from './MyPosts/MyPosts';
 
 const MainWrapper = styled.div`
     height: 100vh;
@@ -8,7 +9,11 @@ const MainWrapper = styled.div`
 `
 
 const Profile = () => {
-    return <MainWrapper></MainWrapper>
+    return (
+    <MainWrapper>
+        <MyPosts />
+    </MainWrapper>
+    )
 }
 
 export default Profile;

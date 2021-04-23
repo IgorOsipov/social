@@ -1,7 +1,7 @@
 import React from 'react';
 import { Container } from "react-bootstrap";
-import Header from "./Components/Header"
-import Profile from './Components/Profile';
+import Header from "./Components/Header/Header"
+import Profile from './Components/Profile/Profile';
 
 
 const App = () => {
