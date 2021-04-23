@@ -1,6 +1,7 @@
 import React from 'react';
 import { Container } from "react-bootstrap";
 import Header from "./Components/Header"
+import Profile from './Components/Profile';
 
 
 const App = () => {
@@ -8,7 +9,7 @@ const App = () => {
     <>
       <Header />
       <Container>
-        <div style={{height: "100vh", border: "1px solid gray", backgroundColor: "#eee"}}></div>
+        <Profile />
       </Container>
     </>
   );

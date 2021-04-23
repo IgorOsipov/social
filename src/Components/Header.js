@@ -15,15 +15,15 @@ const Header = () => {
                 />
             </Navbar.Brand>
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
-            <Navbar.Collapse id="basic-navbar-nav">
-                <Nav className="mr-auto justify-content-center" defaultActiveKey="/home">
+            <Navbar.Collapse style={{marginLeft: "-62px"}} className="row" id="basic-navbar-nav">
+                <Nav className="offset-lg-4 col-lg-4 justify-content-between" defaultActiveKey="/home">
                     <Nav.Link href="/home">Profile</Nav.Link>
                     <Nav.Link href="/messages">Messages</Nav.Link>
                     <Nav.Link href="/news">News</Nav.Link>
                     <Nav.Link href="/music">Music</Nav.Link>
                     <Nav.Link href="/settings">Settings</Nav.Link>
                 </Nav>
-                <Form inline>
+                <Form className="col-lg-4 justify-content-end" inline>
                     <FormControl type="text" placeholder="Search" className="mr-sm-2" />
                     <Button variant="outline-success">Search</Button>
                 </Form>
