@@ -21,7 +21,8 @@ const MyPosts = () => {
                 
             </Col>
             <Col xs={{span: 10, offset: 1 }}>
-                <Post />
+                <Post message="Hello"/>
+                <Post message="World"/>
             </Col>
         </Row>
     )
