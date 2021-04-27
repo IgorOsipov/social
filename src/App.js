@@ -1,9 +1,11 @@
 import React from 'react';
 import { Container } from "react-bootstrap";
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import styled from 'styled-components';
 import Dialog from './Components/Dialogs/Dialog';
-import styled from 'styled-components'
 import Header from "./Components/Header/Header";
 import Profile from './Components/Profile/Profile';
+
 
 
 const MainWrapper = styled.div`
@@ -14,15 +16,17 @@ const MainWrapper = styled.div`
 
 const App = () => {
   return (
-    <>
+    <BrowserRouter>
       <Header />
       <Container>
         <MainWrapper>
-          {/* <Profile /> */}
-          <Dialog />
+          <Switch>
+            <Route path='/profile' component={Profile} />
+            <Route path='/dialogs' component={Dialog} />
+          </Switch>
         </MainWrapper>
       </Container>
-    </>
+    </BrowserRouter>
   );
 }
 
