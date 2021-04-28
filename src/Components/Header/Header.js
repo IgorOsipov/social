@@ -18,7 +18,7 @@ const Header = () => {
             </Navbar.Brand>
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse className="justify-content-between" id="basic-navbar-nav">
-                <Nav className="mr-auto flex-grow-1 justify-content-around">
+                <Nav className="mr-auto flex-grow-1" style={{justifyContent: 'space-evenly'}}>
                     <LinkContainer to="/profile"><Nav.Link>Profile</Nav.Link></LinkContainer>
                     <LinkContainer to="/dialogs"><Nav.Link>Messages</Nav.Link></LinkContainer>
                     <Nav.Link href="/news">News</Nav.Link>
