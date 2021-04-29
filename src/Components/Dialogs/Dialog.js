@@ -14,23 +14,35 @@ const DialogsContainer = styled.div`
     min-height: 100vh;
 `
 
+const DialogItem = (props) => {
+    return(
+        <li><NavLink to={'/dialogs/' + props.id}>{props.name}</NavLink></li>
+    )
+}
+
+const Message = (props) => {
+    return(
+        <li>{props.message}</li>
+    )
+}
+
 const Dialog = () => {
     return (
         <Row>
             <Col xs={3}>
                 <DialogsContainer>
                     <DialogsList>
-                        <li><NavLink to='/dialogs/1'>Kolya</NavLink></li>
-                        <li><NavLink to='/dialogs/2'>Vasya</NavLink></li>
-                        <li><NavLink to='/dialogs/3'>Petya</NavLink></li>
+                        <DialogItem name={'Kolya'} id='1'/>
+                        <DialogItem name={'Vasya'} id='2'/>
+                        <DialogItem name={'Petya'} id='3'/>
                     </DialogsList>
                 </DialogsContainer>
             </Col>
             <Col xs={9}>
                 <MessagesList>
-                    <li>Hi, man</li>
-                    <li>Hello World</li>
-                    <li>Bye</li>
+                    <Message message = 'Hi, man'/>
+                    <Message message = 'Hello World'/>
+                    <Message message = 'Bye'/>
                 </MessagesList>
             </Col>
         </Row>
