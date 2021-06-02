@@ -2,9 +2,9 @@ import React from 'react';
 import MyPosts from './MyPosts/MyPosts';
 
 
-const Profile = () => {
+const Profile = (props) => {
     return (
-        <MyPosts />
+        <MyPosts dispatch={props.dispatch} state={props.state}/>
     )
 }
 

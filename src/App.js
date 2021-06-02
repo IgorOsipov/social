@@ -12,20 +12,20 @@ import Settings from './Components/Settings/Settings';
 
 
 const MainWrapper = styled.div`
-    height: 100vh;
+    min-height: 100vh;
     border: 1px solid gray;
     background-color: #eee;
 `
 
-const App = () => {
+const App = (props) => {
   return (
     <BrowserRouter>
       <Header />
       <Container>
         <MainWrapper>
           <Switch>
-            <Route path='/profile' component={Profile} />
-            <Route path='/dialogs' component={Dialog} />
+            <Route path='/profile' render={ () => <Profile dispatch={props.dispatch} state={props.state.profilePage}/>} />
+            <Route path='/dialogs' render={ () => <Dialog dispatch={props.dispatch} state={props.state.dialogsPage}/> } />
             <Route path='/news' component={News} />
             <Route path='/music' component={Music} />
             <Route path='/settings' component={Settings} />
