@@ -21,6 +21,7 @@ const Header = () => {
                 <Nav className="mr-auto flex-grow-1" style={{justifyContent: 'space-evenly'}}>
                     <LinkContainer to="/profile"><Nav.Link>Profile</Nav.Link></LinkContainer>
                     <LinkContainer to="/dialogs"><Nav.Link>Messages</Nav.Link></LinkContainer>
+                    <LinkContainer to="/users"><Nav.Link>Users</Nav.Link></LinkContainer>
                     <LinkContainer to="/news"><Nav.Link>News</Nav.Link></LinkContainer>
                     <LinkContainer to="/music"><Nav.Link>Music</Nav.Link></LinkContainer>
                     <LinkContainer to="/settings"><Nav.Link>Settings</Nav.Link></LinkContainer>
