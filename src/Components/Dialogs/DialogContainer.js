@@ -8,7 +8,7 @@ const mapStateToProps = (state) => {
         state: state.dialogsPage
     }
 }
-let mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = (dispatch) => {
     return {
         onMessageChange: (text) => {
             dispatch(updateNewMessageTextActionCreator(text))

@@ -8,7 +8,7 @@ const mapStateToProps = (state) => {
         state: state.profilePage
     }
 }
-let mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = (dispatch) => {
     return {
         addPost: () => {
             dispatch(addPostActionCreator())
