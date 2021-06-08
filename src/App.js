@@ -2,7 +2,7 @@ import React from 'react';
 import { Container } from "react-bootstrap";
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import styled from 'styled-components';
-import Dialog from './Components/Dialogs/Dialog';
+import DialogContainer from './Components/Dialogs/DialogContainer';
 import Header from "./Components/Header/Header";
 import Music from './Components/Music/Music';
 import News from './Components/News/News';
@@ -17,15 +17,15 @@ const MainWrapper = styled.div`
     background-color: #eee;
 `
 
-const App = (props) => {
+const App = () => {
   return (
     <BrowserRouter>
       <Header />
       <Container>
         <MainWrapper>
           <Switch>
-            <Route path='/profile' render={ () => <Profile dispatch={props.dispatch} state={props.state.profilePage}/>} />
-            <Route path='/dialogs' render={ () => <Dialog dispatch={props.dispatch} state={props.state.dialogsPage}/> } />
+            <Route path='/profile' render={ () => <Profile />} />
+            <Route path='/dialogs' render={ () => <DialogContainer /> } />
             <Route path='/news' component={News} />
             <Route path='/music' component={Music} />
             <Route path='/settings' component={Settings} />

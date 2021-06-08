@@ -1,10 +1,10 @@
 import React from 'react';
-import MyPosts from './MyPosts/MyPosts';
+import MyPostsContainer from './MyPosts/MyPostsContainer';
 
 
-const Profile = (props) => {
+const Profile = () => {
     return (
-        <MyPosts dispatch={props.dispatch} state={props.state}/>
+        <MyPostsContainer />
     )
 }
 
