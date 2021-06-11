@@ -1,6 +1,6 @@
-import React from 'react';
-import { Button, Card, Pagination } from 'react-bootstrap';
-import avatar from '../../Img/no-avatar.png'
+import React from 'react'
+import { Button, Card, Pagination } from 'react-bootstrap'
+import avatar from '../../Img/no-avatar.png';
 import styled from 'styled-components';
 
 const CardStyle = styled.div`
@@ -44,79 +44,78 @@ const CardStyle = styled.div`
     }
 `
 
-class Users extends React.Component {
 
-    getUsers = (cPage, pSize) => {
-        fetch(`https://social-network.samuraijs.com/api/1.0/users?page=${cPage}&count=${pSize}`)
-            .then(response => response.json())
-            .then(u => {
-                this.props.setUsers(u.items)
-                this.props.SetTotalCount(u.totalCount)
-            })
+
+const Users = (props) => {
+    let pagesCount = Math.ceil(props.totalUsersCount / props.pageSize)
+    let pages = []
+    let pagPage = props.currentPage;
+    let endPagPage = pagPage + 4;
+    
+    if(pagPage === 2){
+        endPagPage = pagPage + 3;
+        pagPage -= 1;
+    }else if(pagPage === pagesCount){
+        endPagPage = pagesCount;
+        pagPage = endPagPage - 4;
+    }else if(pagPage > 2 && pagPage !== 1){
+        endPagPage = pagPage + 2;
+        pagPage -= 2;
     }
-    componentDidMount() {
-        this.getUsers(this.props.currentPage, this.props.pageSize)
-    }
-    onPageChanged = (p) => {
-        this.props.setCurrentPage(p)
-        this.getUsers(p, this.props.pageSize)
+
+    for (let i = pagPage; i <= endPagPage; 
+        i++) {
+        pages.push(i)
     }
 
-
-    render() {
-        let pagesCount = Math.ceil(this.props.totalUsersCount / this.props.pageSize)
-        let pages = []
-        for (let i = (this.props.currentPage <= pagesCount - 2 ? this.props.currentPage - 2 : this.props.currentPage - 5); 
-            i <= (this.props.currentPage <= pagesCount - 2 ? this.props.currentPage + 2 : this.props.currentPage); 
-            i++) 
-            {
-                pages.push(i)
-            }
-
-        return (
-            <CardStyle>
-                <Pagination>
-                    {this.props.currentPage > 5 && <>
-                        <Pagination.Prev />
-                        <Pagination.Item onClick={()=>{this.onPageChanged(1)}}>{1}</Pagination.Item>
-                        <Pagination.Ellipsis/>
-                    </> }
-                    {
-                        pages.map(p => <Pagination.Item className={p === this.props.currentPage && 'active'} onClick={()=>{this.onPageChanged(p)}}>
-                                         {p}
-                                        </Pagination.Item>)
-                    }
-                    {
-                        this.props.currentPage < pagesCount - 5 && <>
-                            <Pagination.Ellipsis />
-                            <Pagination.Item>{pagesCount}</Pagination.Item>
-                            <Pagination.Next />
-                        </>
-                    } 
-                </Pagination>
+    return (
+        <CardStyle>
+            <Pagination>
                 {
-                    this.props.users.map((u) => {
-                        return (
-                            <Card key={u.id} >
-                                <div className="cardInfo">
-                                    <Card.Img variant="top" src={u.photos.small != null ? u.photos.small : avatar} />
-                                    {u.followed
-                                        ? <Button onClick={() => { this.props.unfollow(u.id) }} variant="primary">Unfollow</Button>
-                                        : <Button onClick={() => { this.props.follow(u.id) }} variant="primary">Follow</Button>
-                                    }
-                                </div>
-
-                                <Card.Body>
-                                    <Card.Title>{u.name}</Card.Title>
-                                    <Card.Text>{u.status}</Card.Text>
-                                </Card.Body>
-                            </Card>
-                        )
-                    })
+                    props.currentPage > 1 && <Pagination.Prev  onClick={() => { props.onPageChanged(props.currentPage - 1) }}/>
                 }
-            </CardStyle>
-        )
-    }
+                {props.currentPage > 3 && <>
+                    <Pagination.Item onClick={() => { props.onPageChanged(1) }}>{1}</Pagination.Item>
+                    <Pagination.Ellipsis />
+                </>}
+                {
+                    pages.map(p => <Pagination.Item key={p} className={p === props.currentPage && 'active'} onClick={() => { props.onPageChanged(p) }}>
+                        {p}
+                    </Pagination.Item>)
+                }
+                {
+                    props.currentPage < pagesCount - 3 && <>
+                        <Pagination.Ellipsis />
+                        <Pagination.Item onClick={() => { props.onPageChanged(pagesCount) }}>{pagesCount}</Pagination.Item>
+                        
+                    </>
+                }
+                {
+                    props.currentPage < pagesCount - 1 && <Pagination.Next   onClick={() => { props.onPageChanged(props.currentPage + 1) }}/>
+                }
+            </Pagination>
+            {
+                props.users.map((u) => {
+                    return (
+                        <Card key={u.id} >
+                            <div className="cardInfo">
+                                <Card.Img variant="top" src={u.photos.large != null ? u.photos.small : avatar} />
+                                {u.followed
+                                    ? <Button onClick={() => { props.unfollow(u.id) }} variant="primary">Unfollow</Button>
+                                    : <Button onClick={() => { props.follow(u.id) }} variant="primary">Follow</Button>
+                                }
+                            </div>
+
+                            <Card.Body>
+                                <Card.Title>{u.name}</Card.Title>
+                                <Card.Text>{u.status}</Card.Text>
+                            </Card.Body>
+                        </Card>
+                    )
+                })
+            }
+        </CardStyle>
+    )
 }
 
 export default Users;
