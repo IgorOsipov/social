@@ -55,6 +55,9 @@ const Users = (props) => {
     if(pagPage === 2){
         endPagPage = pagPage + 3;
         pagPage -= 1;
+    }else if(pagPage === pagesCount - 1){
+        endPagPage = pagPage + 1;
+        pagPage -= 3;
     }else if(pagPage === pagesCount){
         endPagPage = pagesCount;
         pagPage = endPagPage - 4;
