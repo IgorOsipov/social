@@ -1,5 +1,6 @@
 import React from 'react'
-import { Button, Card, Pagination } from 'react-bootstrap'
+import { Button, Card, Pagination } from 'react-bootstrap';
+import { NavLink } from "react-router-dom";
 import avatar from '../../Img/no-avatar.png';
 import styled from 'styled-components';
 
@@ -25,11 +26,16 @@ const CardStyle = styled.div`
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-
-            img{
-                height: 75%;
-                width: auto;
+            
+            a{
+                width: 225px;
+                height: 225px;
+                img{
+                    height: 100%;
+                    width: auto;
+                }
             }
+            
             button{
                 height: 15%;
                 width: 100%;
@@ -102,7 +108,7 @@ const Users = (props) => {
                     return (
                         <Card key={u.id} >
                             <div className="cardInfo">
-                                <Card.Img variant="top" src={u.photos.large != null ? u.photos.small : avatar} />
+                                <NavLink to={`profile/${u.id}`}><Card.Img variant="top" src={u.photos.large != null ? u.photos.small : avatar} /></NavLink>
                                 {u.followed
                                     ? <Button onClick={() => { props.unfollow(u.id) }} variant="primary">Unfollow</Button>
                                     : <Button onClick={() => { props.follow(u.id) }} variant="primary">Follow</Button>

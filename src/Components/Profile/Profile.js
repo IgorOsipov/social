@@ -1,10 +1,28 @@
 import React from 'react';
+import { Row, Col } from 'react-bootstrap';
+import PreloaderImage from '../App/Preloader/Preloader';
 import MyPostsContainer from './MyPosts/MyPostsContainer';
 
 
-const Profile = () => {
+const Profile = ({profile}) => {
+
+    if(!profile){
+        return <PreloaderImage />
+    }
+
     return (
-        <MyPostsContainer />
+        <>
+            <Row className="p-5">
+                <Col xs={12} sm={4}>
+                    <img alt='avatar' src={profile.photos.large} />
+                </Col>
+                <Col xs={12} sm={8}>
+                    <h1>{profile.fullName}</h1>
+                    <div>{profile.aboutMe}</div>
+                </Col>
+            </Row>
+            <MyPostsContainer />
+        </>
     )
 }
 

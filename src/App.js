@@ -6,7 +6,7 @@ import DialogContainer from './Components/Dialogs/DialogContainer';
 import Header from "./Components/Header/Header";
 import Music from './Components/Music/Music';
 import News from './Components/News/News';
-import Profile from './Components/Profile/Profile';
+import ProfileContainer from './Components/Profile/ProfileContainer';
 import Settings from './Components/Settings/Settings';
 import UsersContainer from './Components/Users/UsersContainer';
 
@@ -25,7 +25,7 @@ const App = () => {
       <Container>
         <MainWrapper>
           <Switch>
-            <Route path='/profile' render={ () => <Profile />} />
+            <Route path='/profile' render={ () => <ProfileContainer />} />
             <Route path='/dialogs' render={ () => <DialogContainer /> } />
             <Route path='/users' render={ () => <UsersContainer /> } />
             <Route path='/news' component={News} />
