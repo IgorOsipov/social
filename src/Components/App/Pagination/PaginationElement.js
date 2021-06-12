@@ -49,7 +49,7 @@ const PaginationElement = (props) => {
                 </>
             }
             {
-                props.currentPage < pagesCount - 1 && <Pagination.Next onClick={() => { props.onPageChanged(props.currentPage + 1) }} />
+                props.currentPage <= pagesCount - 1 && <Pagination.Next onClick={() => { props.onPageChanged(props.currentPage + 1) }} />
             }
         </Pagination>
     )
