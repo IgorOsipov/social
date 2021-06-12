@@ -25,7 +25,7 @@ const App = () => {
       <Container>
         <MainWrapper>
           <Switch>
-            <Route path='/profile' render={ () => <ProfileContainer />} />
+            <Route path='/profile/:id' render={ () => <ProfileContainer />} />
             <Route path='/dialogs' render={ () => <DialogContainer /> } />
             <Route path='/users' render={ () => <UsersContainer /> } />
             <Route path='/news' component={News} />

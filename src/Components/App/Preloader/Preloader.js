@@ -5,8 +5,8 @@ import styled from 'styled-components';
 const PreloaderStyled = styled.img`
     position: absolute;
     z-index: 10;
-    left: calc(55vw - 200px);
-    top: calc(55vh - 200px);
+    left: calc(50vw - 100px);
+    top: calc(50vh - 100px);
     border: 1px solid rgba(0, 0, 0, 0.1);
     border-radius: 50%;
 `
