@@ -10,7 +10,7 @@ class UsersContainer extends React.Component {
 
     getUsers = (cPage, pSize) => {
         this.props.toggleIsFetching(true)
-        fetch(`https://social-network.samuraijs.com/api/1.0/users?page=${cPage}&count=${pSize}`)
+        fetch(`https://social-network.samuraijs.com/api/1.0/users?page=${cPage}&count=${pSize}`, {credentials: 'include'})
             .then(response => response.json())
             .then(u => {
                 this.props.setUsers(u.items)
