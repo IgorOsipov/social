@@ -1,10 +1,10 @@
 import React from 'react';
-import { Button, Form, FormControl, Nav, Navbar } from 'react-bootstrap';
+import { Nav, Navbar } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 import logo from '../../Img/logo.png';
 
 
-const Header = () => {
+const Header = (props) => {
     return (
         <Navbar sticky="top" bg="dark" variant="dark" expand="lg">
             <Navbar.Brand href="#home">
@@ -25,11 +25,8 @@ const Header = () => {
                     <LinkContainer to="/news"><Nav.Link>News</Nav.Link></LinkContainer>
                     <LinkContainer to="/music"><Nav.Link>Music</Nav.Link></LinkContainer>
                     <LinkContainer to="/settings"><Nav.Link>Settings</Nav.Link></LinkContainer>
-                </Nav>
-                <Form inline>
-                    <FormControl type="text" placeholder="Search" className="mr-sm-2" />
-                    <Button variant="outline-success">Search</Button>
-                </Form>
+                    <LinkContainer to="/login"><Nav.Link>{props.isAuth === true ? props.login : 'Login'}</Nav.Link></LinkContainer> 
+                </Nav>        
             </Navbar.Collapse>
         </Navbar>
 

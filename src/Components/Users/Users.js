@@ -63,7 +63,7 @@ const Users = (props) => {
                     return (
                         <Card key={u.id} >
                             <div className="cardInfo">
-                                <NavLink to={`profile/${u.id}`}><Card.Img variant="top" src={u.photos.large != null ? u.photos.small : avatar} /></NavLink>
+                                <NavLink to={`profile/${u.id}`}><Card.Img variant="top" src={u.photos.large != null ? u.photos.large : avatar} /></NavLink>
                                 {u.followed
                                     ? <Button onClick={() => { props.unfollow(u.id) }} variant="primary">Unfollow</Button>
                                     : <Button onClick={() => { props.follow(u.id) }} variant="primary">Follow</Button>

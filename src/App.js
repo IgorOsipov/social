@@ -3,7 +3,7 @@ import { Container } from "react-bootstrap";
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import styled from 'styled-components';
 import DialogContainer from './Components/Dialogs/DialogContainer';
-import Header from "./Components/Header/Header";
+import HeaderContainer from "./Components/Header/HeaderContainer";
 import Music from './Components/Music/Music';
 import News from './Components/News/News';
 import ProfileContainer from './Components/Profile/ProfileContainer';
@@ -21,7 +21,7 @@ const MainWrapper = styled.div`
 const App = () => {
   return (
     <BrowserRouter>
-      <Header />
+      <HeaderContainer />
       <Container>
         <MainWrapper>
           <Switch>
