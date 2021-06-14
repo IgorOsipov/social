@@ -65,7 +65,8 @@ const Users = (props) => {
                             <div className="cardInfo">
                                 <NavLink to={`profile/${u.id}`}><Card.Img variant="top" src={u.photos.large != null ? u.photos.large : avatar} /></NavLink>
                                 {u.followed
-                                    ? <Button onClick={() => {
+                                    ? <Button disabled={props.followingInProgress.some(id=>id===u.id)} onClick={() => {
+                                        props.toggleFollowingInProgress(true, u.id)
                                         fetch(`https://social-network.samuraijs.com/api/1.0/follow/${u.id}`, {method: 'DELETE', credentials: 'include', headers: {"API-KEY":'6f029e5f-48f9-458c-ac33-6b805ca9e34e'}})
                                         .then(response => response.json())    
                                         .then(r=>{
@@ -73,9 +74,11 @@ const Users = (props) => {
                                                     console.log(r)
                                                     props.unfollow(u.id)
                                                 }
+                                                props.toggleFollowingInProgress(false, u.id)
                                             }) 
                                         }} variant="primary">Unfollow</Button>
-                                    : <Button onClick={() => { 
+                                    : <Button disabled={props.followingInProgress.some(id=>id===u.id)} onClick={() => { 
+                                        props.toggleFollowingInProgress(true, u.id)
                                         fetch(`https://social-network.samuraijs.com/api/1.0/follow/${u.id}`, {method: 'POST', credentials: 'include', headers: {"API-KEY":'6f029e5f-48f9-458c-ac33-6b805ca9e34e'}})
                                         .then(response => response.json())    
                                         .then(r=>{
@@ -83,6 +86,7 @@ const Users = (props) => {
                                                     console.log(r)
                                                     props.follow(u.id)
                                                 }
+                                                props.toggleFollowingInProgress(false, u.id)
                                             }) 
                                         props.follow(u.id) 
                                     }} variant="primary">Follow</Button>
