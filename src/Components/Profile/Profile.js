@@ -3,7 +3,7 @@ import { Row, Col } from 'react-bootstrap';
 import avatar from '../../Img/no-avatar.png';
 import PreloaderImage from '../App/Preloader/Preloader';
 import MyPostsContainer from './MyPosts/MyPostsContainer';
-
+import ProfileStatus from './ProfileStatus';
 
 const Profile = ({profile}) => {
 
@@ -19,7 +19,7 @@ const Profile = ({profile}) => {
                 </Col>
                 <Col xs={12} sm={8}>
                     <h1>{profile.fullName}</h1>
-                    <div>{profile.aboutMe}</div>
+                    <ProfileStatus status={profile.aboutMe}/>
                 </Col>
             </Row>
             <MyPostsContainer />
