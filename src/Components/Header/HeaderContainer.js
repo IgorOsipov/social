@@ -9,7 +9,6 @@ class HeaderContainer extends React.Component {
         fetch(`https://social-network.samuraijs.com/api/1.0/auth/me`, { credentials: 'include' })
             .then(response => response.json())
             .then(r => {
-                console.log(r)
                 if(r.resultCode === 0){
                     this.props.setAuthUserData(r.data.id, r.data.email, r.data.login)
                 }
