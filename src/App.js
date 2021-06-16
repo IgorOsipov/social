@@ -4,6 +4,7 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import styled from 'styled-components';
 import DialogContainer from './Components/Dialogs/DialogContainer';
 import HeaderContainer from "./Components/Header/HeaderContainer";
+import Login from './Components/Login/Login';
 import Music from './Components/Music/Music';
 import News from './Components/News/News';
 import ProfileContainer from './Components/Profile/ProfileContainer';
@@ -31,6 +32,7 @@ const App = () => {
             <Route path='/news' component={News} />
             <Route path='/music' component={Music} />
             <Route path='/settings' component={Settings} />
+            <Route path='/login' component={Login} />
           </Switch>
         </MainWrapper>
       </Container>

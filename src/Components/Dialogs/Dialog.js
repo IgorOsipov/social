@@ -1,5 +1,6 @@
 import React from 'react';
 import { Col, Form, ListGroup, Row, Button } from 'react-bootstrap';
+import { Redirect } from 'react-router-dom';
 import styled from 'styled-components';
 import DialogItem from './DialogItem/DialogItem';
 import Message from './Message/Message';
@@ -11,9 +12,10 @@ const DialogsContainer = styled.div`
     border-right: 1px solid gray;
     min-height: 100vh;
 `
+
 const Dialog = (props) => {
-   
- 
+    if(!props.isAuth) return <Redirect to={'/login'} />
+
 
     return (
         <Row>
