@@ -1,18 +1,15 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import Profile from './Profile';
-import { setUserProfile } from '../../Redux/profileReducer';
+import { getProfile } from '../../Redux/profileReducer';
 import { withRouter } from 'react-router-dom';
+
 
 
 class ProfileContainer extends React.Component {
 
     componentDidMount(){
-        fetch(`https://social-network.samuraijs.com/api/1.0/profile/${this.props.match.params.id}`)
-            .then(response => response.json())
-            .then(p => {
-                this.props.setUserProfile(p)
-            })
+        this.props.getProfile(this.props.match.params.id)
     }
 
     render(){
@@ -27,4 +24,4 @@ const mapStateToProps = (state) => ({
 })
 
 
-export default connect(mapStateToProps,{setUserProfile})(withRouter(ProfileContainer));
+export default connect(mapStateToProps,{getProfile})(withRouter(ProfileContainer));

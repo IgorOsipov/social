@@ -56,7 +56,7 @@ const CardStyle = styled.div`
 const Users = (props) => {
     return (
         <CardStyle>
-            <PaginationElement totalUsersCount={props.totalUsersCount} pageSize={props.pageSize} currentPage={props.currentPage} onPageChanged={props.onPageChanged}/>
+            <PaginationElement totalUsersCount={props.totalUsersCount} pageSize={props.pageSize} currentPage={props.currentPage} onPageChanged={props.onPageChanged} />
             {
                 props.users.map((u) => {
                     return (
@@ -64,8 +64,10 @@ const Users = (props) => {
                             <div className="cardInfo">
                                 <NavLink to={`profile/${u.id}`}><Card.Img variant="top" src={u.photos.large != null ? u.photos.large : avatar} /></NavLink>
                                 {u.followed
-                                    ? <Button disabled={props.followingInProgress.some(id=>id===u.id)} onClick={() => {props.onUnfollowClick(u.id)}} variant="primary">Unfollow</Button>
-                                    : <Button disabled={props.followingInProgress.some(id=>id===u.id)} onClick={() => {props.onFollowClick(u.id)}} variant="primary">Follow</Button>
+                                    ? <Button disabled={props.followingInProgress.some(id => id === u.id)} 
+                                        onClick={() => { props.onUnfollowClick(u.id) }} variant="primary">Unfollow</Button>
+                                    : <Button disabled={props.followingInProgress.some(id => id === u.id)} 
+                                        onClick={() => { props.onFollowClick(u.id) }} variant="primary">Follow</Button>
                                 }
                             </div>
 
