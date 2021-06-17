@@ -13,8 +13,9 @@ const StatusStyles = styled.div`
 `
 
 class ProfileStatus extends React.Component {
+
     state = {
-        editMode: false
+        editMode: false,
     }
 
     activateEditMode = () => {
@@ -27,6 +28,7 @@ class ProfileStatus extends React.Component {
         this.setState({
             editMode: false
         })
+        this.props.updateStatus(this.props.status)
     }
 
     render() {
@@ -34,15 +36,19 @@ class ProfileStatus extends React.Component {
             <StatusStyles>
                 {
                     !this.state.editMode ?
-                        <div className="status-label" onClick={this.activateEditMode}>{this.props.status}</div> :
+                        <div className="status-label" onClick={this.activateEditMode}>{this.props.status || 'click to change status'}</div> :
                         <div>
                             <InputGroup className="mb-3">
                                 <FormControl
                                     value={this.props.status}
                                     autoFocus={true}
+                                    ref={this.statusRef}
+                                    onChange={(e) => {
+                                       this.props.setStatus(e.target.value)
+                                    }}
                                 />
                                 <InputGroup.Append>
-                                    <Button onClick={ this.deactivateEditMode }>Save</Button>
+                                    <Button onClick={() => { this.deactivateEditMode() }}>Save</Button>
                                 </InputGroup.Append>
                             </InputGroup>
                         </div>

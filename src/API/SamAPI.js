@@ -22,6 +22,26 @@ export default class SamServices {
         return res
     }
 
+    getStatus = async (userId) => {
+        const res = await this.getResoure(`profile/status/${userId}`)
+        return res
+    }
+
+    updateStatus = async (status) => {
+        const res = await fetch(`https://social-network.samuraijs.com/api/1.0/profile/status`, {
+            method: 'put',
+            body: JSON.stringify({
+                status: status
+            }),
+            headers: {
+                'API-KEY': this._apiKey,
+                'Content-type': 'application/json; charset=UTF-8'
+            },
+            credentials: 'include'
+        })
+        return res.json()
+    }
+
     getUsers = async (page, pageSize) => {
         const res = await this.getResoure(`users?page=${page}&count=${pageSize}`)
         return res
