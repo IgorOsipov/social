@@ -84,7 +84,6 @@ export const updateStatus = (status) => {
     return (dispatch) => {
         SamAPI.updateStatus(status)
         .then(s=>{
-            console.log(s)
             if(s.resultCode !== 0){
                 dispatch(setStatus(''))
             }

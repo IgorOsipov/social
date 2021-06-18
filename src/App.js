@@ -16,7 +16,7 @@ import UsersContainer from './Components/Users/UsersContainer';
 const MainWrapper = styled.div`
     min-height: 100vh;
     border: 1px solid gray;
-    background-color: #eee;
+    /* background-color: #f7f7f7; */
 `
 
 const App = () => {
