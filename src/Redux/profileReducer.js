@@ -1,7 +1,6 @@
 import SamServices from "../API/SamAPI";
 
 const ADD_POST = 'ADD-POST';
-const UPDATE_NEW_POST_TEXT = 'UPDATE-NEW-POST-TEXT';
 const SET_USER_PROFILE = 'SET_USER_PROFILE';
 const SET_STATUS = 'SET_STATUS';
 
@@ -14,7 +13,6 @@ const initialState = {
         { id: 3, message: 'Lol' },
         { id: 4, message: 'Kek' }
     ],
-    newPostText: '',
     profile: null,
     status: ''
 }
@@ -30,12 +28,6 @@ const profileReducer = (state = initialState, action) => {
             return {
                 ...state,
                 posts: [...state.posts, newPost]
-            }
-
-        case UPDATE_NEW_POST_TEXT:
-            return {
-                ...state,
-                newPostText: state.newPostText + action.text
             }
 
         case SET_USER_PROFILE:
@@ -56,8 +48,7 @@ const profileReducer = (state = initialState, action) => {
 
 }
 
-export const addPost = (text) => ({ type: ADD_POST, text })
-export const updateNewPostTextActionCreator = text => ({ type: UPDATE_NEW_POST_TEXT, text })
+export const addPost = text => ({ type: ADD_POST, text })
 export const setUserProfile = profile => ({ type: SET_USER_PROFILE, profile })
 export const setStatus = status => ({type: SET_STATUS, status})
 
