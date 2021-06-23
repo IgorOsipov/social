@@ -1,8 +1,9 @@
 import React from 'react';
-import { Col, Form, ListGroup, Row, Button } from 'react-bootstrap';
+import { Col, ListGroup, Row } from 'react-bootstrap';
 import styled from 'styled-components';
 import DialogItem from './DialogItem/DialogItem';
 import Message from './Message/Message';
+import DialogForm from './DialogForm/DialogForm';
 
 const MessagesList = styled.ul`
     list-style: none;
@@ -13,6 +14,11 @@ const DialogsContainer = styled.div`
 `
 
 const Dialog = (props) => {
+
+    const onSubmitPost = (values) => {
+        //console.log(values.newPost)
+        props.sendMessage(values.newPost)
+    }
 
     return (
         <Row>
@@ -27,23 +33,7 @@ const Dialog = (props) => {
                 <MessagesList>
                     {props.state.messagesData.map((item)=><Message message={item.message} key={item.id}/>)}
                 </MessagesList>
-                <Form>
-                    <Form.Group controlId="exampleForm.ControlTextarea1">
-                        <Form.Label>New Post</Form.Label>
-                        <Form.Control as="textarea"
-                            onChange = { e => props.onMessageChange(e.nativeEvent.data) }
-                            value={props.state.newMessageText} style={{resize: "none"}} rows={3} 
-                        />
-                    </Form.Group>
-                    <Button   
-                        onClick={()=>{props.onButtonClick()}}
-                        variant="primary" type="button">
-                        Send
-                    </Button>
-                    <Button className="ml-2" variant="outline-primary" type="reset">
-                        Clear
-                    </Button>
-                </Form>
+                <DialogForm onSubmit={onSubmitPost} state={props.state}/>
             </Col>
         </Row>
     )
