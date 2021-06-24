@@ -1,14 +1,15 @@
 import React from 'react';
 import { Form, Button } from 'react-bootstrap';
 import { reduxForm, Field } from 'redux-form';
+import { TextArea } from '../../../App/FormFields/TextArea';
+import { maxLength, requiredField } from '../../../App/Helpers/Validators';
+
+const maxLenght30 = maxLength(30);
 
 const PostForm = (props) => {
     return (
         <Form onSubmit={props.handleSubmit}>
-            <Form.Group controlId="newPostField">
-                <Form.Label>New Post</Form.Label>
-                <Field className="form-control" id='newPostField' name='newPostText' component="textarea"  style={{ resize: "none" }} rows={3}/>
-            </Form.Group>
+            <Field validate={[requiredField, maxLenght30]} className="form-control" name='newPostText' component={TextArea} />
             <Button onClick={props.addPost}
                 variant="primary" type="submit">
                 Add Post

@@ -29,7 +29,7 @@ const Dialog = (props) => {
                     </ListGroup>
                 </DialogsContainer>
             </Col>
-            <Col xs={9}>
+            <Col xs={9} style={{paddingRight: '45px'}}>
                 <MessagesList>
                     {props.state.messagesData.map((item)=><Message message={item.message} key={item.id}/>)}
                 </MessagesList>

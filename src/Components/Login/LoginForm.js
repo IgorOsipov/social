@@ -2,6 +2,9 @@ import React from 'react';
 import { Form, Button } from 'react-bootstrap';
 import { reduxForm, Field } from 'redux-form';
 import styled from 'styled-components';
+import { Checkbox } from '../App/FormFields/Checkbox';
+import { Input } from '../App/FormFields/Input';
+import { requiredField } from '../App/Helpers/Validators';
 
 const LoginFormStyles = styled.div`
     padding: 0 50px;
@@ -27,21 +30,9 @@ const LoginForm = (props) => {
     return (
         <LoginFormStyles>
             <Form onSubmit={props.handleSubmit}>
-                <Form.Group controlId="email">
-                    <Form.Label>Email address</Form.Label>
-                    <Field component="input" className="form-control" name="email" type="email" placeholder="Enter email" />
-                    <Form.Text className="text-muted">
-                        We'll never share your email with anyone else.
-                    </Form.Text>
-                </Form.Group>
-                <Form.Group controlId="password">
-                    <Form.Label>Password</Form.Label>
-                    <Field component="input" className="form-control" id="password" name="password" type="password" placeholder="Password" />
-                </Form.Group>
-                <Form.Group controlId="checkbox">
-                    <Field component="input" type="checkbox" id="checkbox" name="checkbox" />
-                    <Form.Label className='ml-1'>Remember me</Form.Label>
-                </Form.Group>
+                <Field component={Input} validate={[requiredField]} name='email' label="Email address" placeholder="Enter email" type="email"/>
+                <Field component={Input} validate={[requiredField]} name="password" label="Password" placeholder="Enter password" type="password" />
+                <Field component={Checkbox} name="rememberMe"/>
                 <Button variant="primary" type="submit">Login</Button>
             </Form>
         </LoginFormStyles>
