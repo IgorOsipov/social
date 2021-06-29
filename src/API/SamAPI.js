@@ -54,6 +54,36 @@ export default class SamServices {
         return res.json()
     }
 
+    login = async (email, password, rememberMe = false) => {
+        const res = await fetch(`https://social-network.samuraijs.com/api/1.0/auth/login`, {
+            method: 'post',
+            body: JSON.stringify({
+                email: email,
+                password: password,
+                rememberMe: rememberMe
+            }),
+            headers: {
+                "API-KEY": this._apiKey,
+                'Content-type': 'application/json; charset=UTF-8'
+            },
+            credentials: 'include'
+        })
+
+        return res.json()
+    } 
+
+    logout = async () => {
+        const res = await fetch(`https://social-network.samuraijs.com/api/1.0/auth/login`, {
+            method: 'delete',
+            headers: {
+                "API-KEY": this._apiKey
+            },
+            credentials: 'include'
+        })
+
+        return res.json()
+    }
+
     followUser = async (userId) => {
         const res = await fetch(`https://social-network.samuraijs.com/api/1.0/follow/${userId}`, {
             method: 'post',

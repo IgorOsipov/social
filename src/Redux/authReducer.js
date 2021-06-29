@@ -20,7 +20,7 @@ const authReducer = (state = initialState, action) => {
             return {
                 ...state,
                 ...action.data,
-                isAuth: true
+                isAuth: action.data.isAuth
             }
 
         default:
@@ -28,14 +28,36 @@ const authReducer = (state = initialState, action) => {
     }
 }
 
-export const setAuthUserData = (userId, email, login) => ({ type: SET_USER_DATA, data: { userId, email, login } })
+export const setAuthUserData = (userId, email, login, isAuth) => ({ type: SET_USER_DATA, data: { userId, email, login, isAuth } })
 
-export const setAuthUser = () => {
+export const getAuthUserData = () => {
     return (dispatch) => {
         SamAPI.authorization()
         .then(r => {
             if(r.resultCode === 0){
-                dispatch(setAuthUserData(r.data.id, r.data.email, r.data.login))
+                dispatch(setAuthUserData(r.data.id, r.data.email, r.data.login, true))
+            }
+        })
+    }
+}
+
+export const login = (email, password, rememberMe) => {
+    return (dispatch) => {
+        SamAPI.login(email, password, rememberMe)
+        .then(r => {
+            if(r.resultCode === 0){
+                dispatch(getAuthUserData())
+            }
+        })
+    }
+}
+
+export const logout = () => {
+    return (dispatch) => {
+        SamAPI.logout()
+        .then(r => {
+            if(r.resultCode === 0){
+                dispatch(setAuthUserData(null, null, null, false))
             }
         })
     }
