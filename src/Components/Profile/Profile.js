@@ -5,9 +5,9 @@ import PreloaderImage from '../App/Preloader/Preloader';
 import MyPostsContainer from './MyPosts/MyPostsContainer';
 import ProfileStatus from './ProfileStatus';
 
-const Profile = ({profile, status, updateStatus, setStatus}) => {
+const Profile = ({profile, status, updateStatus, setStatus, preloader}) => {
 
-    if(!profile){
+    if(!profile || preloader){
         return <PreloaderImage />
     }
 

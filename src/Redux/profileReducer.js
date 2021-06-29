@@ -3,6 +3,7 @@ import SamServices from "../API/SamAPI";
 const ADD_POST = 'ADD-POST';
 const SET_USER_PROFILE = 'SET_USER_PROFILE';
 const SET_STATUS = 'SET_STATUS';
+const SET_PRELOADER_STATUS = 'SET_PRELOADER_STATUS';
 
 const SamAPI = new SamServices()
 
@@ -14,7 +15,8 @@ const initialState = {
         { id: 4, message: 'Kek' }
     ],
     profile: null,
-    status: ''
+    status: '',
+    preload: false
 }
 
 const profileReducer = (state = initialState, action) => {
@@ -41,6 +43,12 @@ const profileReducer = (state = initialState, action) => {
                 ...state,
                 status: action.status
             }
+        
+        case SET_PRELOADER_STATUS:
+            return{
+                ...state,
+                preload: action.status
+            }
 
         default:
             return state
@@ -51,12 +59,15 @@ const profileReducer = (state = initialState, action) => {
 export const addPost = text => ({ type: ADD_POST, text })
 export const setUserProfile = profile => ({ type: SET_USER_PROFILE, profile })
 export const setStatus = status => ({type: SET_STATUS, status})
+export const setPreloaderStatus = status => ({type: SET_PRELOADER_STATUS, status})
 
 export const getProfile = (id) => {
     return (dispatch) => {
+        dispatch(setPreloaderStatus(true))
         SamAPI.getUserProfile(id)
             .then(p => {
                 dispatch(setUserProfile(p))
+                dispatch(setPreloaderStatus(false))
             })
     }
 }
