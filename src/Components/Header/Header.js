@@ -1,5 +1,5 @@
 import React from 'react';
-import { Nav, Navbar } from 'react-bootstrap';
+import { Nav, Navbar, NavDropdown } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 import logo from '../../Img/logo.png';
 
@@ -18,18 +18,26 @@ const Header = (props) => {
             </Navbar.Brand>
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse className="justify-content-between" id="basic-navbar-nav">
-                <Nav className="mr-auto flex-grow-1" style={{justifyContent: 'space-evenly'}}>
+                <Nav className="mr-auto flex-grow-1" style={{ justifyContent: 'space-evenly' }}>
                     <LinkContainer to="/users"><Nav.Link>Users</Nav.Link></LinkContainer>
                     <LinkContainer to="/dialogs"><Nav.Link>Messages</Nav.Link></LinkContainer>
                     <LinkContainer to="/news"><Nav.Link>News</Nav.Link></LinkContainer>
                     <LinkContainer to="/music"><Nav.Link>Music</Nav.Link></LinkContainer>
                     <LinkContainer to="/settings"><Nav.Link>Settings</Nav.Link></LinkContainer>
-                    <LinkContainer to="/login"><Nav.Link>{props.isAuth === true ? props.login : 'Login'}</Nav.Link></LinkContainer> 
-                </Nav>        
+                    {props.isAuth !== true ? 
+                        <LinkContainer to="/login"><Nav.Link>Login</Nav.Link></LinkContainer>
+                        :
+                        <NavDropdown title={props.login} id="profile-dropdown">
+                            <LinkContainer to={`/profile/${props.userId}`}><NavDropdown.Item>Profile</NavDropdown.Item></LinkContainer>
+                            <NavDropdown.Divider />
+                            <NavDropdown.Item as="button" onClick={props.logout}>Logout</NavDropdown.Item>
+                        </NavDropdown>
+                    }
+                </Nav>
             </Navbar.Collapse>
         </Navbar>
 
-        
+
     )
 }
 
