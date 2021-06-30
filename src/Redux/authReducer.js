@@ -33,7 +33,7 @@ export const setAuthUserData = (userId, email, login, isAuth) => ({ type: SET_US
 
 export const getAuthUserData = () => {
     return (dispatch) => {
-        SamAPI.authorization()
+        return SamAPI.authorization()
         .then(r => {
             if(r.resultCode === 0){
                 dispatch(setAuthUserData(r.data.id, r.data.email, r.data.login, true))
