@@ -1,3 +1,4 @@
+import { stopSubmit } from "redux-form";
 import SamServices from "../API/SamAPI";
 
 const SET_USER_DATA = 'SET_USER_DATA';
@@ -47,6 +48,9 @@ export const login = (email, password, rememberMe) => {
         .then(r => {
             if(r.resultCode === 0){
                 dispatch(getAuthUserData())
+            } else {
+                let message = r.messages.length > 0 ? r.messages[0] : 'Some error'
+                dispatch(stopSubmit('login', { _error: message }))
             }
         })
     }

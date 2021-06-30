@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, Button } from 'react-bootstrap';
+import { Form, Button, Alert } from 'react-bootstrap';
 import { reduxForm, Field } from 'redux-form';
 import styled from 'styled-components';
 import { Checkbox } from '../App/FormFields/Checkbox';
@@ -30,6 +30,7 @@ const LoginForm = (props) => {
     return (
         <LoginFormStyles>
             <Form onSubmit={props.handleSubmit}>
+                {props.error && <Alert variant="danger">{props.error}</Alert>}
                 <Field component={Input} validate={[requiredField]} name='email' label="Email address" placeholder="Enter email" type="email"/>
                 <Field component={Input} validate={[requiredField]} name="password" label="Password" placeholder="Enter password" type="password" />
                 <Field component={Checkbox} name="rememberMe"/>

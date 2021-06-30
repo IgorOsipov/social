@@ -30,7 +30,7 @@ class ProfileContainer extends React.Component {
     render(){
         
         return (
-            <Profile {...this.props}/>
+            <Profile {...this.props} />
         )
     }
 }
@@ -38,7 +38,9 @@ class ProfileContainer extends React.Component {
 const mapStateToProps = (state) => ({
     profile: state.profilePage.profile,
     status: state.profilePage.status,
-    preloader: state.profilePage.preload
+    preloader: state.profilePage.preload,
+    userId: state.auth.userId,
+    isAuth: state.auth.isAuth
 })
 
 export default compose(
