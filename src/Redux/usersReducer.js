@@ -99,7 +99,6 @@ export const followUser = (userId) => (dispatch) => {
 
                 dispatch(toggleFollowingInProgress(false, userId))
             } else if (responce.resultCode === 1) {
-                console.log(responce.messages[0])
                 dispatch(toggleIsFetching(false))
                 dispatch(toggleFollowingInProgress(false, userId))
             }
@@ -117,7 +116,6 @@ export const unfollowUser = (userId) => (dispatch) => {
 
                 dispatch(toggleFollowingInProgress(false, userId))
             } else if (responce.resultCode === 1) {
-                console.log(responce.messages[0])
                 dispatch(toggleIsFetching(false))
                 dispatch(toggleFollowingInProgress(false, userId))
             }
