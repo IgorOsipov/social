@@ -32,6 +32,7 @@ const usersReducer = (state = initialState, action) => {
                     return u
                 })
             }
+
         case UNFOLLOW:
             return {
                 ...state,
@@ -42,22 +43,27 @@ const usersReducer = (state = initialState, action) => {
                     return u
                 })
             }
+
         case SET_USERS:
             return {
                 ...state, users: action.users
             }
+
         case SET_CURRENT_PAGE:
             return {
                 ...state, currentPage: action.currentPage
             }
+
         case SET_TOTAL_COUNT:
             return {
                 ...state, totalUsersCount: action.totalCount
             }
+
         case TOGGLE_IS_FETCHING:
             return {
                 ...state, isFetching: action.isFetching
             }
+
         case TOGGLE_IS_FOLLOWING_PROGRESS:
             return {
                 ...state,
@@ -65,6 +71,7 @@ const usersReducer = (state = initialState, action) => {
                     ? [...state.followingInProgress, action.userID]
                     : [...state.followingInProgress.filter(id => id !== action.userID)]
             }
+            
         default:
             return state
     }
@@ -79,13 +86,14 @@ export const setTotalCount = (totalCount) => ({ type: SET_TOTAL_COUNT, totalCoun
 export const toggleIsFetching = (isFetching) => ({ type: TOGGLE_IS_FETCHING, isFetching })
 export const toggleFollowingInProgress = (isFetching, userID) => ({ type: TOGGLE_IS_FOLLOWING_PROGRESS, isFetching, userID })
 
-export const getUsers = (currentPage, pageSize) => {
+export const requestUsers = (currentPage, pageSize) => {
     return (dispatch) => {
-        dispatch(toggleIsFetching(true))
+        dispatch(toggleIsFetching(true));
         SamAPI.getUsers(currentPage, pageSize).then(u => {
-            dispatch(setUsers(u.items))
-            dispatch(setTotalCount(u.totalCount))
-            dispatch(toggleIsFetching(false))
+            dispatch(setUsers(u.items));
+            dispatch(setTotalCount(u.totalCount));
+            dispatch(setCurrentPage(currentPage));
+            dispatch(toggleIsFetching(false));
         })
     }
 }
