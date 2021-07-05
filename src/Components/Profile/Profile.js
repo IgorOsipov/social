@@ -10,14 +10,14 @@ const Profile = ({profile, status, updateStatus, preloader}) => {
     if(!profile || preloader){
         return <PreloaderImage />
     }
-
+    
     return (
         <>
             <Row className="p-5">
-                <Col xs={12} sm={4}>
+                <Col sm={12} md={6} lg={5} xl={4}>
                     <img alt='avatar' src={profile.photos.large != null ? profile.photos.large : avatar} />
                 </Col>
-                <Col xs={12} sm={8}>
+                <Col sm={12} md={6} lg={7} xl={8}>
                     <h1 className='ml-2'>{profile.fullName}</h1>
                     <ProfileStatus updateStatus={updateStatus} status={status} />
                 </Col>
