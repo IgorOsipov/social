@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Button, InputGroup, FormControl } from 'react-bootstrap'
 import styled from 'styled-components'
 
@@ -12,50 +12,42 @@ const StatusStyles = styled.div`
     }
 `
 
-class ProfileStatus extends React.Component {
+const ProfileStatus = (props) => {
 
-    state = {
-        editMode: false,
+    const [editMode, setEditMode] = useState(false);
+
+    const activateEditMode = () => {
+        setEditMode(true);
     }
 
-    activateEditMode = () => {
-        this.setState({
-            editMode: true
-        })
+    const deactivateEditMode = () => {
+        setEditMode(false);
+        props.updateStatus(props.status);
     }
 
-    deactivateEditMode = () => {
-        this.setState({
-            editMode: false
-        })
-        this.props.updateStatus(this.props.status)
-    }
+    return (
+        <StatusStyles>
+            {
+                editMode !== true
+                ?   <div className="status-label" onClick={activateEditMode}>{props.status || 'click to change status'}</div> 
+                :   <div>
+                        <InputGroup className="mb-3">
+                            <FormControl
+                                value={props.status}
+                                autoFocus={true}
+                                onChange={(e) => {
+                                    props.setStatus(e.target.value)
+                                }}
+                            />
+                            <InputGroup.Append>
+                                <Button onClick={ deactivateEditMode }>Save</Button>
+                            </InputGroup.Append>
+                        </InputGroup>
+                    </div>
+            }
+        </StatusStyles>
+    )
 
-    render() {
-        return (
-            <StatusStyles>
-                {
-                    !this.state.editMode ?
-                        <div className="status-label" onClick={this.activateEditMode}>{this.props.status || 'click to change status'}</div> :
-                        <div>
-                            <InputGroup className="mb-3">
-                                <FormControl
-                                    value={this.props.status}
-                                    autoFocus={true}
-                                    ref={this.statusRef}
-                                    onChange={(e) => {
-                                       this.props.setStatus(e.target.value)
-                                    }}
-                                />
-                                <InputGroup.Append>
-                                    <Button onClick={() => { this.deactivateEditMode() }}>Save</Button>
-                                </InputGroup.Append>
-                            </InputGroup>
-                        </div>
-                }
-            </StatusStyles>
-        )
-    }
 }
 
 export default ProfileStatus
