@@ -5,7 +5,7 @@ import PreloaderImage from '../App/Preloader/Preloader';
 import MyPostsContainer from './MyPosts/MyPostsContainer';
 import ProfileStatus from './ProfileStatus';
 
-const Profile = ({profile, status, updateStatus, setStatus, preloader}) => {
+const Profile = ({profile, status, updateStatus, preloader}) => {
 
     if(!profile || preloader){
         return <PreloaderImage />
@@ -19,7 +19,7 @@ const Profile = ({profile, status, updateStatus, setStatus, preloader}) => {
                 </Col>
                 <Col xs={12} sm={8}>
                     <h1 className='ml-2'>{profile.fullName}</h1>
-                    <ProfileStatus updateStatus={updateStatus} status={status} setStatus={setStatus}/>
+                    <ProfileStatus updateStatus={updateStatus} status={status} />
                 </Col>
             </Row>
             <MyPostsContainer />
