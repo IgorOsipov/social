@@ -5,12 +5,11 @@ import PreloaderImage from '../App/Preloader/Preloader';
 import MyPostsContainer from './MyPosts/MyPostsContainer';
 import ProfileStatus from './ProfileStatus';
 
-const Profile = ({profile, status, updateStatus, preloader}) => {
+const Profile = ({profile, status, updateStatus, preloader, isAuth, userId, currentProfileId}) => {
 
     if(!profile || preloader){
         return <PreloaderImage />
     }
-    
     return (
         <>
             <Row className="p-5">
@@ -19,7 +18,7 @@ const Profile = ({profile, status, updateStatus, preloader}) => {
                 </Col>
                 <Col sm={12} md={6} lg={7} xl={8}>
                     <h1 className='ml-2'>{profile.fullName}</h1>
-                    <ProfileStatus updateStatus={updateStatus} status={status} />
+                    <ProfileStatus currentProfileId={currentProfileId} isAuth={isAuth} userId={userId} updateStatus={updateStatus} status={status} />
                 </Col>
             </Row>
             <MyPostsContainer />

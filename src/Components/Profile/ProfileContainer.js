@@ -34,7 +34,7 @@ class ProfileContainer extends React.Component {
     render(){
         
         return (
-            <Profile {...this.props} />
+            <Profile {...this.props} currentProfileId={parseInt(this.props.match.params.id)} />
         )
     }
 }

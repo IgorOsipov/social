@@ -3,12 +3,15 @@ import { Button, InputGroup, FormControl } from 'react-bootstrap';
 import styled from 'styled-components';
 
 const StatusStyles = styled.div`
-    .status-label{
-        padding: 6px 12px;
+    .user-status-label{
         cursor: pointer;
         &:hover{
             text-decoration: underline;
         }
+    }
+    .user-status-label,
+    .status-label{
+        padding: 6px 12px;
     }
 `
 
@@ -30,25 +33,29 @@ const ProfileStatus = (props) => {
         props.updateStatus(status);
     }
 
+
     return (
         <StatusStyles>
             {
-                editMode !== true
-                ?   <div className="status-label" onClick={activateEditMode}>{status || 'click to change status'}</div> 
-                :   <div>
-                        <InputGroup className="mb-3">
-                            <FormControl
-                                value={status}
-                                autoFocus={true}
-                                onChange={(e) => {
-                                    setStatus(e.target.value)
-                                }}
-                            />
-                            <InputGroup.Append>
-                                <Button onClick={ deactivateEditMode }>Save</Button>
-                            </InputGroup.Append>
-                        </InputGroup>
-                    </div>
+                (props.isAuth && props.userId === props.currentProfileId)
+                ?   (editMode !== true
+                    ?   <div className="user-status-label" onClick={activateEditMode}>{status || 'click to change status'}</div> 
+                    :   <div>
+                            <InputGroup className="mb-3">
+                                <FormControl
+                                    value={status}
+                                    autoFocus={true}
+                                    onChange={(e) => {
+                                        setStatus(e.target.value)
+                                    }}
+                                />
+                                <InputGroup.Append>
+                                    <Button onClick={ deactivateEditMode }>Save</Button>
+                                </InputGroup.Append>
+                            </InputGroup>
+                        </div>
+                    ) 
+                : (status && <div className="status-label" >{status}</div>)
             }
         </StatusStyles>
     )
