@@ -66,7 +66,7 @@ const Users = (props) => {
                                 {u.followed
                                     ? <Button disabled={props.followingInProgress.some(id => id === u.id)} 
                                         onClick={() => { props.onUnfollowClick(u.id) }} variant="primary">Unfollow</Button>
-                                    : <Button disabled={props.followingInProgress.some(id => id === u.id)} 
+                                    : <Button disabled={props.followingInProgress.some(id => id === u.id) || (props.isAuth && u.id === props.userId)} 
                                         onClick={() => { props.onFollowClick(u.id) }} variant="primary">Follow</Button>
                                 }
                             </div>
