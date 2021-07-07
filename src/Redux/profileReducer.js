@@ -1,10 +1,10 @@
 import SamServices from "../API/SamAPI";
 
-const ADD_POST = 'ADD-POST';
-const DELETE_POST = 'DELETE_POST';
-const SET_USER_PROFILE = 'SET_USER_PROFILE';
-const SET_STATUS = 'SET_STATUS';
-const SET_PRELOADER_STATUS = 'SET_PRELOADER_STATUS';
+const ADD_POST = 'profile/ADD-POST';
+const DELETE_POST = 'profile/DELETE_POST';
+const SET_USER_PROFILE = 'profile/SET_USER_PROFILE';
+const SET_STATUS = 'profile/SET_STATUS';
+const SET_PRELOADER_STATUS = 'profile/SET_PRELOADER_STATUS';
 
 const SamAPI = new SamServices()
 
@@ -46,13 +46,13 @@ const profileReducer = (state = initialState, action) => {
             }
 
         case SET_STATUS:
-            return{
+            return {
                 ...state,
                 status: action.status
             }
-        
+
         case SET_PRELOADER_STATUS:
-            return{
+            return {
                 ...state,
                 preload: action.status
             }
@@ -66,37 +66,31 @@ const profileReducer = (state = initialState, action) => {
 export const addPost = text => ({ type: ADD_POST, text });
 export const deletePost = id => ({ type: DELETE_POST, id });
 export const setUserProfile = profile => ({ type: SET_USER_PROFILE, profile });
-export const setStatus = status => ({type: SET_STATUS, status});
-export const setPreloaderStatus = status => ({type: SET_PRELOADER_STATUS, status});
+export const setStatus = status => ({ type: SET_STATUS, status });
+export const setPreloaderStatus = status => ({ type: SET_PRELOADER_STATUS, status });
 
-export const getProfile = (id) => {
-    return (dispatch) => {
-        dispatch(setPreloaderStatus(true))
-        SamAPI.getUserProfile(id)
-            .then(p => {
-                dispatch(setUserProfile(p))
-                dispatch(setPreloaderStatus(false))
-            })
-    }
+export const getProfile = (id) => async (dispatch) => {
+    dispatch(setPreloaderStatus(true))
+    const responce = await SamAPI.getUserProfile(id)
+
+    dispatch(setUserProfile(responce))
+    dispatch(setPreloaderStatus(false))
+
 }
 
-export const getStatus = (id) => {
-    return (dispatch) => {
-        SamAPI.getStatus(id)
-        .then(s=>{
-            dispatch(setStatus(s))
-        })
-    }
+
+export const getStatus = (id) => async (dispatch) => {
+    const responce = await SamAPI.getStatus(id)
+
+    dispatch(setStatus(responce))
 }
 
-export const updateStatus = (status) => {
-    return (dispatch) => {
-        SamAPI.updateStatus(status)
-        .then(s=>{
-            if(s.resultCode !== 0){
-                dispatch(setStatus(''))
-            }
-        })
+
+export const updateStatus = (status) => async (dispatch) => {
+    const responce = await SamAPI.updateStatus(status)
+
+    if (responce.resultCode !== 0) {
+        dispatch(setStatus(''))
     }
 }
 

@@ -1,7 +1,7 @@
 import { stopSubmit } from "redux-form";
 import SamServices from "../API/SamAPI";
 
-const SET_USER_DATA = 'SET_USER_DATA';
+const SET_USER_DATA = 'auth/SET_USER_DATA';
 
 const SamAPI = new SamServices();
 
@@ -31,39 +31,30 @@ const authReducer = (state = initialState, action) => {
 
 export const setAuthUserData = (userId, email, login, isAuth) => ({ type: SET_USER_DATA, data: { userId, email, login, isAuth } })
 
-export const getAuthUserData = () => {
-    return (dispatch) => {
-        return SamAPI.authorization()
-        .then(r => {
-            if(r.resultCode === 0){
-                dispatch(setAuthUserData(r.data.id, r.data.email, r.data.login, true))
-            }
-        })
+export const getAuthUserData = () => async (dispatch) => {
+    const responce = await SamAPI.authorization();
+    if (responce.resultCode === 0) {
+        dispatch(setAuthUserData(responce.data.id, responce.data.email, responce.data.login, true))
     }
 }
 
-export const login = (email, password, rememberMe) => {
-    return (dispatch) => {
-        SamAPI.login(email, password, rememberMe)
-        .then(r => {
-            if(r.resultCode === 0){
-                dispatch(getAuthUserData())
-            } else {
-                let message = r.messages.length > 0 ? r.messages[0] : 'Some error'
-                dispatch(stopSubmit('login', { _error: message }))
-            }
-        })
+
+export const login = (email, password, rememberMe) => async (dispatch) => {
+    const responce = await SamAPI.login(email, password, rememberMe)
+
+    if (responce.resultCode === 0) {
+        dispatch(getAuthUserData())
+    } else {
+        let message = responce.messages.length > 0 ? responce.messages[0] : 'Some error'
+        dispatch(stopSubmit('login', { _error: message }))
     }
 }
 
-export const logout = () => {
-    return (dispatch) => {
-        SamAPI.logout()
-        .then(r => {
-            if(r.resultCode === 0){
-                dispatch(setAuthUserData(null, null, null, false))
-            }
-        })
+export const logout = () => async (dispatch) => {
+    const responce = await SamAPI.logout()
+
+    if (responce.resultCode === 0) {
+        dispatch(setAuthUserData(null, null, null, false))
     }
 }
 

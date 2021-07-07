@@ -1,12 +1,13 @@
 import SamServices from "../API/SamAPI";
+import { updateObjectInArray } from "../Components/App/Helpers/Objects";
 
-const FOLLOW = 'FOLLOW'
-const UNFOLLOW = 'UNFOLLOW'
-const SET_USERS = 'SET_USERS'
-const SET_CURRENT_PAGE = 'SET_CURRENT_PAGE'
-const SET_TOTAL_COUNT = 'SET_TOTAL_COUNT'
-const TOGGLE_IS_FETCHING = 'TOGGLE_IS_FETCHING'
-const TOGGLE_IS_FOLLOWING_PROGRESS = 'TOGGLE_IS_FOLLOWING_PROGRESS'
+const FOLLOW = 'users/FOLLOW'
+const UNFOLLOW = 'users/UNFOLLOW'
+const SET_USERS = 'users/SET_USERS'
+const SET_CURRENT_PAGE = 'users/SET_CURRENT_PAGE'
+const SET_TOTAL_COUNT = 'users/SET_TOTAL_COUNT'
+const TOGGLE_IS_FETCHING = 'users/TOGGLE_IS_FETCHING'
+const TOGGLE_IS_FOLLOWING_PROGRESS = 'users/TOGGLE_IS_FOLLOWING_PROGRESS'
 
 const SamAPI = new SamServices()
 
@@ -25,23 +26,13 @@ const usersReducer = (state = initialState, action) => {
         case FOLLOW:
             return {
                 ...state,
-                users: state.users.map(u => {
-                    if (u.id === action.userID) {
-                        return { ...u, followed: true }
-                    }
-                    return u
-                })
+                users: updateObjectInArray(state.users, action.userID, 'id', {followed: true})
             }
 
         case UNFOLLOW:
             return {
                 ...state,
-                users: state.users.map(u => {
-                    if (u.id === action.userID) {
-                        return { ...u, followed: false }
-                    }
-                    return u
-                })
+                users: updateObjectInArray(state.users, action.userID, 'id', {followed: false})
             }
 
         case SET_USERS:
@@ -71,64 +62,49 @@ const usersReducer = (state = initialState, action) => {
                     ? [...state.followingInProgress, action.userID]
                     : [...state.followingInProgress.filter(id => id !== action.userID)]
             }
-            
+
         default:
             return state
     }
 
 }
 
-export const follow = (userID) => ({ type: FOLLOW, userID })
-export const unfollow = (userID) => ({ type: UNFOLLOW, userID })
-export const setUsers = (users) => ({ type: SET_USERS, users })
-export const setCurrentPage = (currentPage) => ({ type: SET_CURRENT_PAGE, currentPage })
-export const setTotalCount = (totalCount) => ({ type: SET_TOTAL_COUNT, totalCount })
-export const toggleIsFetching = (isFetching) => ({ type: TOGGLE_IS_FETCHING, isFetching })
-export const toggleFollowingInProgress = (isFetching, userID) => ({ type: TOGGLE_IS_FOLLOWING_PROGRESS, isFetching, userID })
+export const follow = userID => ({ type: FOLLOW, userID });
+export const unfollow =userID => ({ type: UNFOLLOW, userID });
+export const setUsers = users => ({ type: SET_USERS, users });
+export const setCurrentPage = currentPage => ({ type: SET_CURRENT_PAGE, currentPage });
+export const setTotalCount = totalCount => ({ type: SET_TOTAL_COUNT, totalCount });
+export const toggleIsFetching = isFetching => ({ type: TOGGLE_IS_FETCHING, isFetching });
+export const toggleFollowingInProgress = (isFetching, userID) => ({ type: TOGGLE_IS_FOLLOWING_PROGRESS, isFetching, userID });
 
-export const requestUsers = (currentPage, pageSize) => {
-    return (dispatch) => {
-        dispatch(toggleIsFetching(true));
-        SamAPI.getUsers(currentPage, pageSize).then(u => {
-            dispatch(setUsers(u.items));
-            dispatch(setTotalCount(u.totalCount));
-            dispatch(setCurrentPage(currentPage));
-            dispatch(toggleIsFetching(false));
-        })
+export const requestUsers = (currentPage, pageSize) => async (dispatch) => {
+    dispatch(toggleIsFetching(true));
+    const responce = await SamAPI.getUsers(currentPage, pageSize)
+    dispatch(setUsers(responce.items));
+    dispatch(setTotalCount(responce.totalCount));
+    dispatch(setCurrentPage(currentPage));
+    dispatch(toggleIsFetching(false));
+}
+
+const toogleUser = async (dispatch, userId, apiMethod, actionCreator) => {
+    dispatch(toggleFollowingInProgress(true, userId));
+    const responce = await apiMethod(userId);
+
+    if (responce.resultCode === 0) {
+        dispatch(actionCreator(userId));
+    } else if (responce.resultCode === 1) {
+        dispatch(toggleIsFetching(false));
     }
+
+    dispatch(toggleFollowingInProgress(false, userId));
 }
 
-export const followUser = (userId) => (dispatch) => {
-    dispatch(toggleFollowingInProgress(true, userId))
-    SamAPI.followUser(userId)
-        .then(responce => {
-            if (responce.resultCode === 0) {
-                dispatch(follow(userId));
-
-                dispatch(toggleFollowingInProgress(false, userId))
-            } else if (responce.resultCode === 1) {
-                dispatch(toggleIsFetching(false))
-                dispatch(toggleFollowingInProgress(false, userId))
-            }
-        })
-        .catch((e) => console.log(e))
-
+export const followUser = (userId) => async (dispatch) => {
+    toogleUser(dispatch, userId, SamAPI.followUser.bind(SamAPI), follow);
 }
 
-export const unfollowUser = (userId) => (dispatch) => {
-    dispatch(toggleFollowingInProgress(true, userId))
-    SamAPI.unfollowUser(userId)
-        .then(responce => {
-            if (responce.resultCode === 0) {
-                dispatch(unfollow(userId));
-
-                dispatch(toggleFollowingInProgress(false, userId))
-            } else if (responce.resultCode === 1) {
-                dispatch(toggleIsFetching(false))
-                dispatch(toggleFollowingInProgress(false, userId))
-            }
-        })
-        .catch((e) => console.log(e))
+export const unfollowUser = (userId) => async (dispatch) => {
+    toogleUser(dispatch, userId, SamAPI.unfollowUser.bind(SamAPI), unfollow);
 }
 
 export default usersReducer;
