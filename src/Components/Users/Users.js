@@ -1,9 +1,7 @@
-import React from 'react'
-import { Button, Card } from 'react-bootstrap';
-import { NavLink } from "react-router-dom";
-import avatar from '../../Img/no-avatar.png';
+import React from 'react';
 import styled from 'styled-components';
 import PaginationElement from '../App/Pagination/PaginationElement';
+import User from './User';
 
 const CardStyle = styled.div`
     display: flex;
@@ -58,26 +56,7 @@ const Users = (props) => {
         <CardStyle>
             <PaginationElement totalUsersCount={props.totalUsersCount} pageSize={props.pageSize} currentPage={props.currentPage} onPageChanged={props.onPageChanged} />
             {
-                props.users.map((u) => {
-                    return (
-                        <Card key={u.id} >
-                            <div className="cardInfo">
-                                <NavLink to={`profile/${u.id}`}><Card.Img variant="top" src={u.photos.large != null ? u.photos.large : avatar} /></NavLink>
-                                {u.followed
-                                    ? <Button disabled={props.followingInProgress.some(id => id === u.id)} 
-                                        onClick={() => { props.onUnfollowClick(u.id) }} variant="primary">Unfollow</Button>
-                                    : <Button disabled={props.followingInProgress.some(id => id === u.id) || (props.isAuth && u.id === props.userId)} 
-                                        onClick={() => { props.onFollowClick(u.id) }} variant="primary">Follow</Button>
-                                }
-                            </div>
-
-                            <Card.Body>
-                                <Card.Title>{u.name}</Card.Title>
-                                <Card.Text>{u.status}</Card.Text>
-                            </Card.Body>
-                        </Card>
-                    )
-                })
+                props.users.map((u) => <User key={u.id} user={u} {...props}/>)
             }
         </CardStyle>
     )

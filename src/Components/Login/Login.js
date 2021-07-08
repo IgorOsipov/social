@@ -7,12 +7,12 @@ import LoginForm from './LoginForm';
 
 
 
-const Login = (props) => {
+const Login = ({isAuth, id, login}) => {
     const onSubmit = (data) => {
-        props.login(data.email, data.password, data.rememberMe);
+        login(data.email, data.password, data.rememberMe);
     }
     
-    if(props.isAuth) return <Redirect to={`/profile/${props.id}`} />
+    if(isAuth) return <Redirect to={`/profile/${id}`} />
 
     return (
         <LoginForm onSubmit={onSubmit}/>

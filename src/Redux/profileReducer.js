@@ -87,10 +87,10 @@ export const getStatus = (id) => async (dispatch) => {
 
 
 export const updateStatus = (status) => async (dispatch) => {
-    const responce = await SamAPI.updateStatus(status)
-
+    const responce = await SamAPI.updateStatus(status);
+    
     if (responce.resultCode !== 0) {
-        dispatch(setStatus(''))
+        dispatch(setStatus(''));
     }
 }
 

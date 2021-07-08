@@ -26,11 +26,11 @@ const LoginFormStyles = styled.div`
     
 `
 
-const LoginForm = (props) => {
+const LoginForm = ({error, handleSubmit}) => {
     return (
         <LoginFormStyles>
-            <Form onSubmit={props.handleSubmit}>
-                {props.error && <Alert variant="danger">{props.error}</Alert>}
+            <Form onSubmit={handleSubmit}>
+                {error && <Alert variant="danger">{error}</Alert>}
                 <Field component={Input} validate={[requiredField]} name='email' label="Email address" placeholder="Enter email" type="email"/>
                 <Field component={Input} validate={[requiredField]} name="password" label="Password" placeholder="Enter password" type="password" />
                 <Field component={Checkbox} name="rememberMe"/>
