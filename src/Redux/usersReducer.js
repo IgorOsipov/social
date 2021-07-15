@@ -79,7 +79,7 @@ export const toggleFollowingInProgress = (isFetching, userID) => ({ type: TOGGLE
 
 export const requestUsers = (currentPage, pageSize) => async (dispatch) => {
     dispatch(toggleIsFetching(true));
-    const responce = await SamAPI.getUsers(currentPage, pageSize)
+    const responce = await SamAPI.getUsers(currentPage, pageSize);
     dispatch(setUsers(responce.items));
     dispatch(setTotalCount(responce.totalCount));
     dispatch(setCurrentPage(currentPage));

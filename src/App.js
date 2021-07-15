@@ -1,18 +1,18 @@
-import React from 'react';
+import React, {Suspense} from 'react';
 import { Container } from "react-bootstrap";
 import { connect } from 'react-redux';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import styled from 'styled-components';
 import { initializeApp } from './Redux/appReducer';
-import DialogContainer from './Components/Dialogs/DialogContainer';
 import HeaderContainer from "./Components/Header/HeaderContainer";
-import Login from './Components/Login/Login';
-import Music from './Components/Music/Music';
-import News from './Components/News/News';
-import ProfileContainer from './Components/Profile/ProfileContainer';
-import Settings from './Components/Settings/Settings';
-import UsersContainer from './Components/Users/UsersContainer';
-
+import { LinearProgress } from '@material-ui/core';
+const DialogContainer = React.lazy(() => import('./Components/Dialogs/DialogContainer'));
+const ProfileContainer = React.lazy(() => import('./Components/Profile/ProfileContainer'));
+const UsersContainer = React.lazy(() => import('./Components/Users/UsersContainer'));
+const Settings = React.lazy(() => import('./Components/Settings/Settings'));
+const News = React.lazy(() => import('./Components/News/News'));
+const Music = React.lazy(() => import('./Components/Music/Music'));
+const Login = React.lazy(() => import('./Components/Login/Login'));
 
 const MainWrapper = styled.div`
     min-height: 100vh;
@@ -27,7 +27,7 @@ class App extends React.Component {
   }
 
   render(){
-    if(!this.props.initialized) return null
+    if(!this.props.initialized) return <LinearProgress />
 
     return (
       <BrowserRouter>
@@ -35,13 +35,13 @@ class App extends React.Component {
         <Container>
           <MainWrapper>
             <Switch>
-              <Route exact path='/profile/:id?' component={ProfileContainer} />
-              <Route path='/dialogs' component={DialogContainer} />
-              <Route path='/users' component={UsersContainer} />
-              <Route path='/news' component={News} />
-              <Route path='/music' component={Music} />
-              <Route path='/settings' component={Settings} />
-              <Route path='/login' component={Login} />
+                <Route exact path='/profile/:id?' render={() => <Suspense fallback={<LinearProgress />}> <ProfileContainer /> </Suspense>} />
+                <Route path='/dialogs' render={() => <Suspense fallback={<LinearProgress />}> <DialogContainer /> </Suspense>} />
+                <Route path='/users' render={() => <Suspense fallback={<LinearProgress />}> <UsersContainer /> </Suspense>} />
+                <Route path='/news' render={() => <Suspense fallback={<LinearProgress />}> <News /> </Suspense>} />
+                <Route path='/music' render={() => <Suspense fallback={<LinearProgress />}> <Music /> </Suspense>} />
+                <Route path='/settings' render={() => <Suspense fallback={<LinearProgress />}> <Settings /> </Suspense>} />
+                <Route path='/login' render={() => <Suspense fallback={<LinearProgress />}> <Login /> </Suspense>} />              
             </Switch>
           </MainWrapper>
         </Container>
