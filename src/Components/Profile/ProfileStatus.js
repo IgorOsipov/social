@@ -11,7 +11,7 @@ const StatusStyles = styled.div`
     }
     .user-status-label,
     .status-label{
-        padding: 6px 12px;
+        padding: 6px 0;
     }
 `
 
