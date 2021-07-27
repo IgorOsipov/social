@@ -9,7 +9,7 @@ const maxLenght30 = maxLength(30);
 const PostForm = (props) => {
     return (
         <Form onSubmit={props.handleSubmit}>
-            <Field validate={[requiredField, maxLenght30]} className="form-control" name='newPostText' component={TextArea} />
+            <Field validate={[requiredField, maxLenght30]} className="form-control" name='newPostText' label='New Post' component={TextArea} />
             <Button onClick={props.addPost}
                 variant="primary" type="submit">
                 Add Post

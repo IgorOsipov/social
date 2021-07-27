@@ -110,4 +110,16 @@ export const savePhoto = (file) => async (dispatch) => {
     }
 }
 
+export const saveProfile = (profile) => async (dispatch, getState) => {
+    const userId = getState().auth.userId;
+
+    dispatch(setPreloaderStatus(true));
+    const responce = await SamAPI.saveProfile(profile);
+
+    if (responce.resultCode === 0) {
+        dispatch(getProfile(userId));
+    }
+    dispatch(setPreloaderStatus(false));
+}
+
 export default profileReducer;

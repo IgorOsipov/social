@@ -122,4 +122,17 @@ export default class SamServices {
         })
         return res.json()
     }
+
+    saveProfile = async (profile) => {
+        const res = await fetch(`https://social-network.samuraijs.com/api/1.0/profile`, {
+            method: 'put',
+            body: JSON.stringify(profile),
+            headers: {
+                'API-KEY': this._apiKey,
+                'Content-type': 'application/json; charset=UTF-8'
+            },
+            credentials: 'include'
+        })
+        return res.json()
+    }
 }

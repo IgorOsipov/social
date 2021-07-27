@@ -1,14 +1,17 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Row, Col } from 'react-bootstrap';
 import avatar from '../../Img/no-avatar.png';
 import PreloaderImage from '../App/Preloader/Preloader';
-import Contact from './Contact';
 import MyPostsContainer from './MyPosts/MyPostsContainer';
+import ProfileData from './ProfileData';
+import ProfileDataForm from './ProfileDataForm';
 import ProfileStatus from './ProfileStatus';
 
 
 
-const Profile = ({ profile, status, updateStatus, preloader, isAuth, userId, isOwner, savePhoto }) => {
+const Profile = ({ profile, status, updateStatus, preloader, isAuth, userId, isOwner, savePhoto, saveProfile }) => {
+
+    const [editProfileDataMode, setEditProfileDataMode] = useState(false);
 
     if (!profile || preloader) {
         return <PreloaderImage />
@@ -21,6 +24,11 @@ const Profile = ({ profile, status, updateStatus, preloader, isAuth, userId, isO
         }
     }
 
+    const onSubmit = (formData) => {
+        saveProfile(formData);
+        setEditProfileDataMode(false);
+    }
+
     return (
         <>
             <Row className="p-5">
@@ -31,17 +39,10 @@ const Profile = ({ profile, status, updateStatus, preloader, isAuth, userId, isO
                 <Col sm={12} md={6} lg={7} xl={8}>
                     <h1 className=''>{profile.fullName}</h1>
                     <ProfileStatus isOwner={isOwner} isAuth={isAuth} userId={userId} updateStatus={updateStatus} status={status} />
-
-                    <div className="mt-2"><strong>Looking for a job:</strong> {profile.lookingForAJob ? 'yes' : 'no'}</div>
-                    {profile.lookingForAJob && <div><strong>My professional skills:</strong> {profile.lookingForAJobDescription}</div>}
-                    <div><strong>About Me:</strong> {profile.aboutMe}</div>
-
-                    <div>
-                        <strong>Contacts:</strong>
-                        {Object.keys(profile.contacts).map(key => {
-                            return <Contact key={key} contactTitle={key} contactValue={profile.contacts[key]} />
-                        })}
-                    </div>
+                    {!editProfileDataMode 
+                        ? <ProfileData profile={profile} setEditProfileDataMode={setEditProfileDataMode} isOwner={isOwner}/> 
+                        : <ProfileDataForm initialValues={profile} profile={profile} setEditProfileDataMode={setEditProfileDataMode} onSubmit={onSubmit} />
+                    }
                 </Col>
             </Row>
             <MyPostsContainer />

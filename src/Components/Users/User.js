@@ -8,7 +8,7 @@ const User = ({user, onUnfollowClick, onFollowClick, isAuth, userId, followingIn
     return (
         <Card>
             <div className="cardInfo">
-                <NavLink to={`profile/${user.id}`}><Card.Img variant="top" loading="lazy" src={user.photos.large != null ? user.photos.large : avatar} /></NavLink>
+                <NavLink to={`profile/${user.id}`}><Card.Img variant="top" className="img-thumbnail" loading="lazy" src={user.photos.large || avatar} /></NavLink>
                 {user.followed
                     ? <Button disabled={followingInProgress.some(id => id === user.id)}
                         onClick={() => { onUnfollowClick(user.id) }} variant="primary">Unfollow</Button>
