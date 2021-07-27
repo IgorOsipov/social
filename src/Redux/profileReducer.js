@@ -103,13 +103,11 @@ export const updateStatus = (status) => async (dispatch) => {
 }
 
 export const savePhoto = (file) => async (dispatch) => {
-    dispatch(setPreloaderStatus(true));
     const responce = await SamAPI.savePhoto(file);
     
     if (responce.resultCode === 0) {
         dispatch(setPhotoSuccess(responce.data.photos));
     }
-    dispatch(setPreloaderStatus(false));
 }
 
 export default profileReducer;
