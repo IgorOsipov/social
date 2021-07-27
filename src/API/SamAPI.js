@@ -107,4 +107,19 @@ export default class SamServices {
 
         return res.json()
     }
+
+    savePhoto = async (image) => {
+        const formData = new FormData(); 
+        formData.append("image", image);
+
+        const res = await fetch(`https://social-network.samuraijs.com/api/1.0/profile/photo`, {
+            method: 'put',
+            body: formData,
+            headers: {
+                'API-KEY': this._apiKey
+            },
+            credentials: 'include'
+        })
+        return res.json()
+    }
 }

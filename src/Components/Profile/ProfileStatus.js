@@ -37,7 +37,7 @@ const ProfileStatus = (props) => {
     return (
         <StatusStyles>
             {
-                (props.isAuth && props.userId === props.currentProfileId)
+                (props.isAuth && props.isOwner)
                 ?   (editMode !== true
                     ?   <div className="user-status-label" onClick={activateEditMode}>{status || 'click to change status'}</div> 
                     :   <div>

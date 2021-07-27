@@ -5,6 +5,7 @@ const DELETE_POST = 'profile/DELETE_POST';
 const SET_USER_PROFILE = 'profile/SET_USER_PROFILE';
 const SET_STATUS = 'profile/SET_STATUS';
 const SET_PRELOADER_STATUS = 'profile/SET_PRELOADER_STATUS';
+const SET_PHOTO_SUCCESS = 'profile/SET_PHOTO_SUCCESS'
 
 const SamAPI = new SamServices()
 
@@ -56,6 +57,12 @@ const profileReducer = (state = initialState, action) => {
                 ...state,
                 preload: action.status
             }
+        
+        case SET_PHOTO_SUCCESS: 
+            return{
+                ...state,
+                profile: {...state.profile, photos: action.photos}
+            }
 
         default:
             return state
@@ -68,6 +75,7 @@ export const deletePost = id => ({ type: DELETE_POST, id });
 export const setUserProfile = profile => ({ type: SET_USER_PROFILE, profile });
 export const setStatus = status => ({ type: SET_STATUS, status });
 export const setPreloaderStatus = status => ({ type: SET_PRELOADER_STATUS, status });
+export const setPhotoSuccess = photos => ({type: SET_PHOTO_SUCCESS, photos});
 
 export const getProfile = (id) => async (dispatch) => {
     dispatch(setPreloaderStatus(true))
@@ -92,6 +100,16 @@ export const updateStatus = (status) => async (dispatch) => {
     if (responce.resultCode !== 0) {
         dispatch(setStatus(''));
     }
+}
+
+export const savePhoto = (file) => async (dispatch) => {
+    dispatch(setPreloaderStatus(true));
+    const responce = await SamAPI.savePhoto(file);
+    
+    if (responce.resultCode === 0) {
+        dispatch(setPhotoSuccess(responce.data.photos));
+    }
+    dispatch(setPreloaderStatus(false));
 }
 
 export default profileReducer;
