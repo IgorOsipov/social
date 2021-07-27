@@ -8,7 +8,7 @@ import { requiredField, maxLength } from '../App/Helpers/Validators';
 
 const maxLenght100 = maxLength(100);
 
-const ProfileDataForm = ({ setEditProfileDataMode, handleSubmit, error}) => {
+const ProfileDataForm = ({ profile, setEditProfileDataMode, handleSubmit, error}) => {
     return (
         <Form onSubmit={handleSubmit}>
             {error && <Alert variant="danger">{error}</Alert>}
@@ -16,6 +16,9 @@ const ProfileDataForm = ({ setEditProfileDataMode, handleSubmit, error}) => {
             <Field component={Select} validate={[requiredField]} name="lookingForAJob" label="Looking for a job"  options={[{value: true, option: 'yes'},{value: false, option: 'no'}]} />
             <Field validate={[requiredField, maxLenght100]} className="form-control" name='lookingForAJobDescription' label="Job description" component={TextArea} />
             <Field validate={[requiredField, maxLenght100]} className="form-control" name='aboutMe' label="About Me" component={TextArea} />
+            {Object.keys(profile.contacts).map(key => {
+                return <Field component={Input} key={`contacts.${key}`} name={`contacts.${key}`} label={key} placeholder="" type="text" />
+            })}
             <Button variant="primary" type="submit">Save</Button>
             <Button className="ml-1" variant="danger" type="button" onClick={()=>setEditProfileDataMode(false)}>Cancel</Button>
         </Form>

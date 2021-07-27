@@ -13,7 +13,7 @@ const Profile = ({ profile, status, updateStatus, preloader, isAuth, userId, isO
 
     const [editProfileDataMode, setEditProfileDataMode] = useState(false);
 
-    if (!profile || preloader) {
+    if (!profile) {
         return <PreloaderImage />
     }
 
@@ -25,12 +25,14 @@ const Profile = ({ profile, status, updateStatus, preloader, isAuth, userId, isO
     }
 
     const onSubmit = (formData) => {
-        saveProfile(formData);
-        setEditProfileDataMode(false);
+        saveProfile(formData).then(() => {
+            setEditProfileDataMode(false);
+        });
     }
 
     return (
         <>
+            {preloader && <PreloaderImage />}
             <Row className="p-5">
                 <Col sm={12} md={6} lg={5} xl={4}>
                     <img className="img-thumbnail" alt='avatar' src={profile.photos.large || avatar} />

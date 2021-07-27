@@ -1,3 +1,4 @@
+import { stopSubmit } from "redux-form";
 import SamServices from "../API/SamAPI";
 
 const ADD_POST = 'profile/ADD-POST';
@@ -103,11 +104,13 @@ export const updateStatus = (status) => async (dispatch) => {
 }
 
 export const savePhoto = (file) => async (dispatch) => {
+    dispatch(setPreloaderStatus(true));
     const responce = await SamAPI.savePhoto(file);
     
     if (responce.resultCode === 0) {
         dispatch(setPhotoSuccess(responce.data.photos));
     }
+    dispatch(setPreloaderStatus(false));
 }
 
 export const saveProfile = (profile) => async (dispatch, getState) => {
@@ -118,6 +121,10 @@ export const saveProfile = (profile) => async (dispatch, getState) => {
 
     if (responce.resultCode === 0) {
         dispatch(getProfile(userId));
+    }else{
+        dispatch(stopSubmit('updateProfile', {_error: responce.messages[0]}));
+        dispatch(setPreloaderStatus(false));
+        return Promise.reject(responce.messages[0]);
     }
     dispatch(setPreloaderStatus(false));
 }
