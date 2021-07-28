@@ -7,19 +7,20 @@ import LoginForm from './LoginForm';
 
 
 
-const Login = ({isAuth, id, login}) => {
+const Login = ({isAuth, id, login, captchaUrl}) => {
     const onSubmit = (data) => {
-        login(data.email, data.password, data.rememberMe);
+        login(data.email, data.password, data.rememberMe, data.captcha);
     }
     
     if(isAuth) return <Redirect to={`/profile/${id}`} />
 
     return (
-        <LoginForm onSubmit={onSubmit}/>
+        <LoginForm onSubmit={onSubmit} captchaUrl={captchaUrl}/>
     )
 }
 
 const mapStateToProps = (state) => ({
+    captchaUrl: state.auth.captchaUrl,
     isAuth: state.auth.isAuth,
     id: state.auth.userId
 })

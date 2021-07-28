@@ -27,6 +27,16 @@ export default class SamServices {
         return res
     }
 
+    getCaptcha = async () => {
+        const res = await this.getResoure(`security/get-captcha-url`)
+        return res
+    }
+
+    getUsers = async (page, pageSize) => {
+        const res = await this.getResoure(`users?page=${page}&count=${pageSize}`)
+        return res
+    }
+
     updateStatus = async (status) => {
         const res = await fetch(`https://social-network.samuraijs.com/api/1.0/profile/status`, {
             method: 'put',
@@ -42,11 +52,6 @@ export default class SamServices {
         return res.json()
     }
 
-    getUsers = async (page, pageSize) => {
-        const res = await this.getResoure(`users?page=${page}&count=${pageSize}`)
-        return res
-    }
-
     authorization = async () => {
         const res = await fetch(`${this._apiBase}auth/me`, {
             credentials: 'include'
@@ -54,13 +59,14 @@ export default class SamServices {
         return res.json()
     }
 
-    login = async (email, password, rememberMe = false) => {
+    login = async (email, password, rememberMe = false, captcha) => {
         const res = await fetch(`https://social-network.samuraijs.com/api/1.0/auth/login`, {
             method: 'post',
             body: JSON.stringify({
                 email: email,
                 password: password,
-                rememberMe: rememberMe
+                rememberMe: rememberMe,
+                captcha: captcha
             }),
             headers: {
                 "API-KEY": this._apiKey,
