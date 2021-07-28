@@ -26,7 +26,7 @@ const LoginFormStyles = styled.div`
     
 `
 
-const LoginForm = ({error, handleSubmit}) => {
+const LoginForm = ({error, handleSubmit, captchaUrl}) => {
     return (
         <LoginFormStyles>
             <Form onSubmit={handleSubmit}>
@@ -34,6 +34,10 @@ const LoginForm = ({error, handleSubmit}) => {
                 <Field component={Input} validate={[requiredField]} name='email' label="Email address" placeholder="Enter email" type="email"/>
                 <Field component={Input} validate={[requiredField]} name="password" label="Password" placeholder="Enter password" type="password" />
                 <Field component={Checkbox} name="rememberMe"/>
+                {captchaUrl && <div>
+                    <img className="mb-2" alt='captcha' src={captchaUrl}/>
+                    <Field component={Input} validate={[requiredField]} name="captcha" placeholder="Enter captcha" type="text"/>
+                </div>}
                 <Button variant="primary" type="submit">Login</Button>
             </Form>
         </LoginFormStyles>
