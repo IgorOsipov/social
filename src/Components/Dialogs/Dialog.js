@@ -16,8 +16,7 @@ const DialogsContainer = styled.div`
 const Dialog = (props) => {
 
     const onSubmitPost = (values) => {
-        //console.log(values.newPost)
-        props.sendMessage(values.newPost)
+        props.sendMessage(values.newPost);
     }
 
     return (
