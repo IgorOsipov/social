@@ -1,7 +1,7 @@
 import React, {Suspense} from 'react';
 import { Container } from "react-bootstrap";
 import { connect } from 'react-redux';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom';
 import styled from 'styled-components';
 import { initializeApp } from './Redux/appReducer';
 import HeaderContainer from "./Components/Header/HeaderContainer";
@@ -35,6 +35,7 @@ class App extends React.Component {
         <Container>
           <MainWrapper>
             <Switch>
+                <Route exact path='/'><Redirect to='/profile'/></Route>
                 <Route exact path='/profile/:id?' render={() => <Suspense fallback={<LinearProgress />}> <ProfileContainer /> </Suspense>} />
                 <Route path='/dialogs' render={() => <Suspense fallback={<LinearProgress />}> <DialogContainer /> </Suspense>} />
                 <Route path='/users' render={() => <Suspense fallback={<LinearProgress />}> <UsersContainer /> </Suspense>} />
