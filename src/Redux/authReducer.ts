@@ -7,14 +7,16 @@ const GET_CAPCTHA_URL = 'auth/GET_CAPCTHA_URL';
 const SamAPI = new SamServices();
 
 const initialState = {
-    userId: null,
-    email: null,
-    login: null,
-    isAuth: false,
-    captchaUrl: null
+    userId: null as number | null,
+    email: null as string | null,
+    login: null as string | null,
+    isAuth: false as boolean,
+    captchaUrl: null as string | null
 }
 
-const authReducer = (state = initialState, action) => {
+export type initialStateType = typeof initialState;
+
+const authReducer = (state = initialState, action:any): initialStateType => {
 
     switch (action.type) {
 
@@ -37,10 +39,26 @@ const authReducer = (state = initialState, action) => {
     }
 }
 
-export const setCapcthaUrl = (captchaUrl) => ({ type: GET_CAPCTHA_URL, captchaUrl});
-export const setAuthUserData = (userId, email, login, isAuth) => ({ type: SET_USER_DATA, data: { userId, email, login, isAuth } });
+type setCapcthaUrlactionType = {
+    type: typeof GET_CAPCTHA_URL
+    captchaUrl: string
+}
+export const setCapcthaUrl = (captchaUrl: string): setCapcthaUrlactionType => ({ type: GET_CAPCTHA_URL, captchaUrl});
 
-export const getAuthUserData = () => async (dispatch) => {
+type setAuthUserDataActionDataType ={
+    userId: number | null
+    email: string | null
+    login: string | null
+    isAuth: boolean
+}
+type setAuthUserDataActionType = {
+    type: typeof SET_USER_DATA,
+    data: setAuthUserDataActionDataType
+}
+export const setAuthUserData = (userId: number | null, email: string | null, login: string | null, isAuth: boolean): setAuthUserDataActionType  => (
+    { type: SET_USER_DATA, data: { userId, email, login, isAuth } });
+
+export const getAuthUserData = () => async (dispatch: any) => {
     const responce = await SamAPI.authorization();
     if (responce.resultCode === 0) {
         dispatch(setAuthUserData(responce.data.id, responce.data.email, responce.data.login, true));
@@ -48,7 +66,7 @@ export const getAuthUserData = () => async (dispatch) => {
 }
 
 
-export const login = (email, password, rememberMe, captcha) => async (dispatch) => {
+export const login = (email: string, password: string, rememberMe: boolean, captcha: string) => async (dispatch:any) => {
     const responce = await SamAPI.login(email, password, rememberMe, captcha);
 
     if (responce.resultCode === 0) {
@@ -62,7 +80,7 @@ export const login = (email, password, rememberMe, captcha) => async (dispatch) 
     }
 }
 
-export const logout = () => async (dispatch) => {
+export const logout = () => async (dispatch:any) => {
     const responce = await SamAPI.logout();
 
     if (responce.resultCode === 0) {
@@ -70,11 +88,12 @@ export const logout = () => async (dispatch) => {
     }
 }
 
-export const getCaptcha = () => async (dispatch) => {
+export const getCaptcha = () => async (dispatch: any) => {
     const responce = await SamAPI.getCaptcha();
     const captchaUrl = responce.url;
 
     dispatch(setCapcthaUrl(captchaUrl));
 }
+
 
 export default authReducer;

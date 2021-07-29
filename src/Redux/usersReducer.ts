@@ -1,5 +1,6 @@
 import SamServices from "../API/SamAPI";
 import { updateObjectInArray } from "../Components/App/Helpers/Objects";
+import { usersType } from "../Types/types";
 
 const FOLLOW = 'users/FOLLOW'
 const UNFOLLOW = 'users/UNFOLLOW'
@@ -9,18 +10,23 @@ const SET_TOTAL_COUNT = 'users/SET_TOTAL_COUNT'
 const TOGGLE_IS_FETCHING = 'users/TOGGLE_IS_FETCHING'
 const TOGGLE_IS_FOLLOWING_PROGRESS = 'users/TOGGLE_IS_FOLLOWING_PROGRESS'
 
-const SamAPI = new SamServices()
+const SamAPI = new SamServices();
+
+
+
 
 const initialState = {
-    users: [],
+    users: [] as Array<usersType>,
     pageSize: 10,
     totalUsersCount: 0,
     currentPage: 1,
     isFetching: false,
-    followingInProgress: []
+    followingInProgress: [] as Array<number> //array of users id
 }
 
-const usersReducer = (state = initialState, action) => {
+type initialStateType = typeof initialState;
+
+const usersReducer = (state = initialState, action: any): initialStateType => {
 
     switch (action.type) {
         case FOLLOW:
@@ -69,15 +75,45 @@ const usersReducer = (state = initialState, action) => {
 
 }
 
-export const follow = userID => ({ type: FOLLOW, userID });
-export const unfollow =userID => ({ type: UNFOLLOW, userID });
-export const setUsers = users => ({ type: SET_USERS, users });
-export const setCurrentPage = currentPage => ({ type: SET_CURRENT_PAGE, currentPage });
-export const setTotalCount = totalCount => ({ type: SET_TOTAL_COUNT, totalCount });
-export const toggleIsFetching = isFetching => ({ type: TOGGLE_IS_FETCHING, isFetching });
-export const toggleFollowingInProgress = (isFetching, userID) => ({ type: TOGGLE_IS_FOLLOWING_PROGRESS, isFetching, userID });
+type followActionType = {
+    type: typeof FOLLOW
+    userID: number
+}
+export const follow = (userID: number): followActionType => ({ type: FOLLOW, userID });
+type unfollowActionType = {
+    type: typeof UNFOLLOW
+    userID: number
+}
+export const unfollow = (userID: number): unfollowActionType => ({ type: UNFOLLOW, userID });
+type setUsersActionType = {
+    type: typeof SET_USERS
+    users: Array<usersType>
+}
+export const setUsers = (users: Array<usersType>): setUsersActionType => ({ type: SET_USERS, users });
+type setCurrentPageActionType = {
+    type: typeof SET_CURRENT_PAGE
+    currentPage: number
+}
+export const setCurrentPage = (currentPage: number): setCurrentPageActionType => ({ type: SET_CURRENT_PAGE, currentPage });
+type setTotalCountActionType={
+    type: typeof SET_TOTAL_COUNT
+    totalCount: number
+}
+export const setTotalCount = (totalCount: number): setTotalCountActionType => ({ type: SET_TOTAL_COUNT, totalCount });
+type toggleIsFetchingActionType = {
+    type: typeof TOGGLE_IS_FETCHING
+    isFetching: boolean
+}
+export const toggleIsFetching = (isFetching: boolean): toggleIsFetchingActionType => ({ type: TOGGLE_IS_FETCHING, isFetching });
+type toggleFollowingInProgressActiontype = {
+    type: typeof TOGGLE_IS_FOLLOWING_PROGRESS
+    isFetching: boolean
+    userID: number
 
-export const requestUsers = (currentPage, pageSize) => async (dispatch) => {
+}
+export const toggleFollowingInProgress = (isFetching: boolean, userID: number): toggleFollowingInProgressActiontype => ({ type: TOGGLE_IS_FOLLOWING_PROGRESS, isFetching, userID });
+
+export const requestUsers = (currentPage: number, pageSize: number) => async (dispatch: any) => {
     dispatch(toggleIsFetching(true));
     const responce = await SamAPI.getUsers(currentPage, pageSize);
     dispatch(setUsers(responce.items));
@@ -86,7 +122,7 @@ export const requestUsers = (currentPage, pageSize) => async (dispatch) => {
     dispatch(toggleIsFetching(false));
 }
 
-const toogleUser = async (dispatch, userId, apiMethod, actionCreator) => {
+const toogleUser = async (dispatch: any, userId: number, apiMethod: any, actionCreator: any) => {
     dispatch(toggleFollowingInProgress(true, userId));
     const responce = await apiMethod(userId);
 
@@ -99,11 +135,11 @@ const toogleUser = async (dispatch, userId, apiMethod, actionCreator) => {
     dispatch(toggleFollowingInProgress(false, userId));
 }
 
-export const followUser = (userId) => async (dispatch) => {
+export const followUser = (userId: number) => async (dispatch: any) => {
     toogleUser(dispatch, userId, SamAPI.followUser.bind(SamAPI), follow);
 }
 
-export const unfollowUser = (userId) => async (dispatch) => {
+export const unfollowUser = (userId: number) => async (dispatch: any) => {
     toogleUser(dispatch, userId, SamAPI.unfollowUser.bind(SamAPI), unfollow);
 }
 

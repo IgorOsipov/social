@@ -1,5 +1,6 @@
 import { stopSubmit } from "redux-form";
 import SamServices from "../API/SamAPI";
+import { photosType, postsType, profileType } from "../Types/types";
 
 const ADD_POST = 'profile/ADD-POST';
 const DELETE_POST = 'profile/DELETE_POST';
@@ -10,19 +11,22 @@ const SET_PHOTO_SUCCESS = 'profile/SET_PHOTO_SUCCESS'
 
 const SamAPI = new SamServices()
 
+
 const initialState = {
     posts: [
         { id: 1, message: 'Hello' },
         { id: 2, message: 'World' },
         { id: 3, message: 'Lol' },
         { id: 4, message: 'Kek' }
-    ],
-    profile: null,
+    ] as Array<postsType>,
+    profile: null as profileType | null,
     status: '',
     preload: false
 }
 
-const profileReducer = (state = initialState, action) => {
+export type initialStateType = typeof initialState;
+
+const profileReducer = (state = initialState, action: any):initialStateType => {
 
     switch (action.type) {
         case ADD_POST:
@@ -62,7 +66,7 @@ const profileReducer = (state = initialState, action) => {
         case SET_PHOTO_SUCCESS: 
             return{
                 ...state,
-                profile: {...state.profile, photos: action.photos}
+                profile: {...state.profile, photos: action.photos} as profileType
             }
 
         default:
@@ -71,14 +75,38 @@ const profileReducer = (state = initialState, action) => {
 
 }
 
-export const addPost = text => ({ type: ADD_POST, text });
-export const deletePost = id => ({ type: DELETE_POST, id });
-export const setUserProfile = profile => ({ type: SET_USER_PROFILE, profile });
-export const setStatus = status => ({ type: SET_STATUS, status });
-export const setPreloaderStatus = status => ({ type: SET_PRELOADER_STATUS, status });
-export const setPhotoSuccess = photos => ({type: SET_PHOTO_SUCCESS, photos});
+type addPostActionType = {
+    type: typeof ADD_POST,
+    text: string
+}
+export const addPost = (text: string):addPostActionType => ({ type: ADD_POST, text });
+type deletePostActionType = {
+    type: typeof DELETE_POST
+    id: number
+}
+export const deletePost = (id: number):deletePostActionType => ({ type: DELETE_POST, id });
+type setUserProfileActionType = {
+    type: typeof SET_USER_PROFILE
+    profile: profileType
+}
+export const setUserProfile = (profile: profileType):setUserProfileActionType => ({ type: SET_USER_PROFILE, profile });
+type setStatusActionType = {
+    type: typeof SET_STATUS
+    status: string
+}
+export const setStatus = (status: string):setStatusActionType => ({ type: SET_STATUS, status });
+type setPreloaderStatusActionType = {
+    type: typeof SET_PRELOADER_STATUS
+    status: boolean
+}
+export const setPreloaderStatus = (status: boolean):setPreloaderStatusActionType => ({ type: SET_PRELOADER_STATUS, status });
+type setPhotoSuccessActionType = {
+    type: typeof SET_PHOTO_SUCCESS
+    photos: photosType
+}
+export const setPhotoSuccess = (photos: photosType):setPhotoSuccessActionType => ({type: SET_PHOTO_SUCCESS, photos});
 
-export const getProfile = (id) => async (dispatch) => {
+export const getProfile = (id: number) => async (dispatch: any) => {
     dispatch(setPreloaderStatus(true))
     const responce = await SamAPI.getUserProfile(id)
 
@@ -88,14 +116,14 @@ export const getProfile = (id) => async (dispatch) => {
 }
 
 
-export const getStatus = (id) => async (dispatch) => {
+export const getStatus = (id: number) => async (dispatch: any) => {
     const responce = await SamAPI.getStatus(id)
 
     dispatch(setStatus(responce))
 }
 
 
-export const updateStatus = (status) => async (dispatch) => {
+export const updateStatus = (status: string) => async (dispatch: any) => {
     const responce = await SamAPI.updateStatus(status);
     
     if (responce.resultCode !== 0) {
@@ -103,7 +131,7 @@ export const updateStatus = (status) => async (dispatch) => {
     }
 }
 
-export const savePhoto = (file) => async (dispatch) => {
+export const savePhoto = (file: any) => async (dispatch: any) => {
     dispatch(setPreloaderStatus(true));
     const responce = await SamAPI.savePhoto(file);
     
@@ -113,7 +141,7 @@ export const savePhoto = (file) => async (dispatch) => {
     dispatch(setPreloaderStatus(false));
 }
 
-export const saveProfile = (profile) => async (dispatch, getState) => {
+export const saveProfile = (profile: profileType) => async (dispatch: any, getState: any) => {
     const userId = getState().auth.userId;
 
     dispatch(setPreloaderStatus(true));
