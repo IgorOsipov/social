@@ -2,9 +2,18 @@ import React from 'react'
 import { Button, Card } from 'react-bootstrap';
 import { NavLink } from "react-router-dom";
 import avatar from '../../Img/no-avatar.png';
+import { usersType } from '../../Types/types';
 
+type Props = {
+    user: usersType
+    onUnfollowClick: () => void
+    onFollowClick: () => void
+    isAuth: boolean
+    userId: number
+    followingInProgress: Array<number>
+}
 
-const User = ({user, onUnfollowClick, onFollowClick, isAuth, userId, followingInProgress}) => {
+const User: React.FC<Props> = ({user, onUnfollowClick, onFollowClick, isAuth, userId, followingInProgress}) => {
     return (
         <Card>
             <div className="cardInfo">

@@ -13,6 +13,7 @@
     "@types/react-bootstrap": "^0.32.26",
     "@types/react-dom": "^17.0.9",
     "@types/react-paginate": "^7.1.1",
+    "@types/react-router-dom": "^5.3.2",
     "@types/redux-form": "^8.3.2",
     "@types/styled-components": "^5.1.11",
     "bootstrap": "^4.6.0",
