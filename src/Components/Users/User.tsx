@@ -6,8 +6,8 @@ import { usersType } from '../../Types/types';
 
 type Props = {
     user: usersType
-    onUnfollowClick: () => void
-    onFollowClick: () => void
+    onUnfollowClick: (userId: number) => void
+    onFollowClick: (userId: number) => void
     isAuth: boolean
     userId: number
     followingInProgress: Array<number>
