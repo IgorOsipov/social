@@ -16,7 +16,7 @@ class UsersContainer extends React.Component {
     }
 
     onPageChanged = (p) => {
-        this.props.requestUsers(p, this.props.pageSize)
+        this.props.requestUsers(p.selected + 1, this.props.pageSize)
     }
 
     onFollowClick = (userId) => {

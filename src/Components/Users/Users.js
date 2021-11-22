@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import PaginationElement from '../App/Pagination/PaginationElement';
+import ReactPaginate from 'react-paginate';
 import User from './User';
 
 const CardStyle = styled.div`
@@ -54,7 +54,26 @@ const CardStyle = styled.div`
 const Users = (props) => {
     return (
         <CardStyle>
-            <PaginationElement totalUsersCount={props.totalUsersCount} pageSize={props.pageSize} currentPage={props.currentPage} onPageChanged={props.onPageChanged} />
+            <ReactPaginate 
+                breakLabel="..."
+                nextLabel=">"
+                previousLabel="<"
+                onPageChange={props.onPageChanged}
+                pageRangeDisplayed= {5}
+                marginPagesDisplayed = {1}
+                pageCount={Math.ceil(props.totalUsersCount / props.pageSize)}
+                pageClassName="page-item"
+                pageLinkClassName="page-link"
+                previousClassName="page-item"
+                previousLinkClassName="page-link"
+                nextClassName="page-item"
+                nextLinkClassName="page-link"
+                breakClassName="page-item"
+                breakLinkClassName="page-link"
+                containerClassName="pagination"
+                activeClassName="active"
+                renderOnZeroPageCount={null}
+            />
             {
                 props.users.map((u) => <User key={u.id} user={u} {...props}/>)
             }
