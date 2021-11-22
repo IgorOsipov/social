@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import ReactPaginate from 'react-paginate';
 import User from './User';
+import { usersType } from '../../Types/types';
 
 const CardStyle = styled.div`
     display: flex;
@@ -49,19 +50,30 @@ const CardStyle = styled.div`
     }
 `
 
+type Props = {
+    users: Array<usersType>
+    followingInProgress: Array<number>
+    onFollowClick: () => void
+    onUnfollowClick: () => void
+    onPageChanged: () => void
+    pageSize: number
+    totalUsersCount: number
+    isAuth: boolean
+    userId: number
+}
 
 
-const Users = (props) => {
+const Users: React.FC<Props> = ({ userId, users, followingInProgress, onFollowClick, onUnfollowClick, onPageChanged, pageSize, totalUsersCount, isAuth }) => {
     return (
         <CardStyle>
-            <ReactPaginate 
+            <ReactPaginate
                 breakLabel="..."
                 nextLabel=">"
                 previousLabel="<"
-                onPageChange={props.onPageChanged}
-                pageRangeDisplayed= {5}
-                marginPagesDisplayed = {1}
-                pageCount={Math.ceil(props.totalUsersCount / props.pageSize)}
+                onPageChange={onPageChanged}
+                pageRangeDisplayed={5}
+                marginPagesDisplayed={1}
+                pageCount={Math.ceil(totalUsersCount / pageSize)}
                 pageClassName="page-item"
                 pageLinkClassName="page-link"
                 previousClassName="page-item"
@@ -72,10 +84,17 @@ const Users = (props) => {
                 breakLinkClassName="page-link"
                 containerClassName="pagination"
                 activeClassName="active"
-                renderOnZeroPageCount={null}
             />
             {
-                props.users.map((u) => <User key={u.id} user={u} {...props}/>)
+                users.map((u) => <User
+                    key={u.id}
+                    user={u}
+                    onFollowClick={onFollowClick}
+                    onUnfollowClick={onUnfollowClick}
+                    followingInProgress={followingInProgress}
+                    isAuth={isAuth}
+                    userId={userId}
+                />)
             }
         </CardStyle>
     )
