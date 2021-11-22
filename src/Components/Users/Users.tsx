@@ -53,9 +53,9 @@ const CardStyle = styled.div`
 type Props = {
     users: Array<usersType>
     followingInProgress: Array<number>
-    onFollowClick: () => void
-    onUnfollowClick: () => void
-    onPageChanged: () => void
+    onFollowClick: (userId: number) => void
+    onUnfollowClick: (userId: number) => void
+    onPageChanged: (p: { selected: number }) => void
     pageSize: number
     totalUsersCount: number
     isAuth: boolean
