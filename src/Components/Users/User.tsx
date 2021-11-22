@@ -9,7 +9,7 @@ type Props = {
     onUnfollowClick: (userId: number) => void
     onFollowClick: (userId: number) => void
     isAuth: boolean
-    userId: number
+    userId: number | null
     followingInProgress: Array<number>
 }
 

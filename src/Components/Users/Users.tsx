@@ -59,7 +59,7 @@ type Props = {
     pageSize: number
     totalUsersCount: number
     isAuth: boolean
-    userId: number
+    userId: number | null
 }
 
 
