@@ -7,6 +7,7 @@ import { compose } from 'redux';
 import { withAuthRedirect } from '../HOC/WithAuthRedirect';
 import { getCurrentPage, getFollowingInProgress, getIsFetching, getPageSize, getTotalUsersCount, getUsersSelector } from '../../Redux/usersSelectors';
 import { usersType } from '../../Types/types';
+import { AppStateType } from '../../Redux/store';
 
 type Props = {
     currentPage: number
@@ -59,7 +60,7 @@ class UsersContainer extends React.Component<Props> {
     }
 }
 
-const mapStateToProps = (state: any) => {
+const mapStateToProps = (state: AppStateType) => {
     return {
         users: getUsersSelector(state),
         pageSize: getPageSize(state),
