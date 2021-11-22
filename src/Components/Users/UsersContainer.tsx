@@ -60,6 +60,7 @@ class UsersContainer extends React.Component<PropsType> {
                 followingInProgress={this.props.followingInProgress}
                 isAuth={this.props.isAuth}
                 userId={this.props.userId}
+                currentPage = {this.props.currentPage}
             />
         </>
     }

@@ -60,13 +60,15 @@ type Props = {
     totalUsersCount: number
     isAuth: boolean
     userId: number | null
+    currentPage: number
 }
 
 
-const Users: React.FC<Props> = ({ userId, users, followingInProgress, onFollowClick, onUnfollowClick, onPageChanged, pageSize, totalUsersCount, isAuth }) => {
+const Users: React.FC<Props> = ({ userId, users, followingInProgress, onFollowClick, onUnfollowClick, onPageChanged, pageSize, totalUsersCount, isAuth, currentPage }) => {
     return (
         <CardStyle>
             <ReactPaginate
+                initialPage={currentPage - 1}
                 breakLabel="..."
                 nextLabel=">"
                 previousLabel="<"
