@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 import { Button, Card } from 'react-bootstrap';
 import { NavLink } from "react-router-dom";
 import avatar from '../../Img/no-avatar.png';
@@ -17,7 +17,9 @@ const User: React.FC<Props> = ({user, onUnfollowClick, onFollowClick, isAuth, us
     return (
         <Card>
             <div className="cardInfo">
-                <NavLink to={`profile/${user.id}`}><Card.Img variant="top" className="img-thumbnail" loading="lazy" src={user.photos.large || avatar} /></NavLink>
+                <NavLink to={`profile/${user.id}`}>
+                    <Card.Img variant="top" className="img-thumbnail" loading="lazy" src={user.photos.large || avatar} />
+                </NavLink>
                 {user.followed
                     ? <Button disabled={followingInProgress.some(id => id === user.id)}
                         onClick={() => { onUnfollowClick(user.id) }} variant="primary">Unfollow</Button>
