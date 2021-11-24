@@ -1,6 +1,9 @@
+import { Dispatch } from "redux";
+import { ThunkAction } from "redux-thunk";
 import SamServices from "../API/SamAPI";
 import { updateObjectInArray } from "../Components/App/Helpers/Objects";
 import { usersType } from "../Types/types";
+import { AppStateType } from "./store";
 
 const FOLLOW = 'users/FOLLOW'
 const UNFOLLOW = 'users/UNFOLLOW'
@@ -26,19 +29,19 @@ const initialState = {
 
 type initialStateType = typeof initialState;
 
-const usersReducer = (state = initialState, action: any): initialStateType => {
+const usersReducer = (state = initialState, action: ActionsTypes): initialStateType => {
 
     switch (action.type) {
         case FOLLOW:
             return {
                 ...state,
-                users: updateObjectInArray(state.users, action.userID, 'id', {followed: true})
+                users: updateObjectInArray(state.users, action.userID, 'id', { followed: true })
             }
 
         case UNFOLLOW:
             return {
                 ...state,
-                users: updateObjectInArray(state.users, action.userID, 'id', {followed: false})
+                users: updateObjectInArray(state.users, action.userID, 'id', { followed: false })
             }
 
         case SET_USERS:
@@ -75,6 +78,10 @@ const usersReducer = (state = initialState, action: any): initialStateType => {
 
 }
 
+type ActionsTypes = followActionType | unfollowActionType | setUsersActionType
+    | setCurrentPageActionType | setTotalCountActionType | toggleFollowingInProgressActiontype
+    | toggleIsFetchingActionType;
+
 type followActionType = {
     type: typeof FOLLOW
     userID: number
@@ -95,7 +102,7 @@ type setCurrentPageActionType = {
     currentPage: number
 }
 export const setCurrentPage = (currentPage: number): setCurrentPageActionType => ({ type: SET_CURRENT_PAGE, currentPage });
-type setTotalCountActionType={
+type setTotalCountActionType = {
     type: typeof SET_TOTAL_COUNT
     totalCount: number
 }
@@ -113,16 +120,20 @@ type toggleFollowingInProgressActiontype = {
 }
 export const toggleFollowingInProgress = (isFetching: boolean, userID: number): toggleFollowingInProgressActiontype => ({ type: TOGGLE_IS_FOLLOWING_PROGRESS, isFetching, userID });
 
-export const requestUsers = (currentPage: number, pageSize: number) => async (dispatch: any) => {
-    dispatch(toggleIsFetching(true));
-    const responce = await SamAPI.getUsers(currentPage, pageSize);
-    dispatch(setUsers(responce.items));
-    dispatch(setTotalCount(responce.totalCount));
-    dispatch(setCurrentPage(currentPage));
-    dispatch(toggleIsFetching(false));
+type ThunkType = ThunkAction<Promise<void>, AppStateType, unknown, ActionsTypes>;
+export const requestUsers = (currentPage: number, pageSize: number): ThunkType => {
+    return async (dispatch) => {
+        dispatch(toggleIsFetching(true));
+        const responce = await SamAPI.getUsers(currentPage, pageSize);
+        dispatch(setUsers(responce.items));
+        dispatch(setTotalCount(responce.totalCount));
+        dispatch(setCurrentPage(currentPage));
+        dispatch(toggleIsFetching(false));
+    }
 }
 
-const toogleUser = async (dispatch: any, userId: number, apiMethod: any, actionCreator: any) => {
+type ActionCreatorType = (userId: number) => followActionType | unfollowActionType;
+const toogleUser = async (dispatch: Dispatch<ActionsTypes>, userId: number, apiMethod: any, actionCreator: ActionCreatorType) => {
     dispatch(toggleFollowingInProgress(true, userId));
     const responce = await apiMethod(userId);
 
@@ -135,11 +146,11 @@ const toogleUser = async (dispatch: any, userId: number, apiMethod: any, actionC
     dispatch(toggleFollowingInProgress(false, userId));
 }
 
-export const followUser = (userId: number) => async (dispatch: any) => {
+export const followUser = (userId: number): ThunkType => async (dispatch) => {
     toogleUser(dispatch, userId, SamAPI.followUser.bind(SamAPI), follow);
 }
 
-export const unfollowUser = (userId: number) => async (dispatch: any) => {
+export const unfollowUser = (userId: number): ThunkType => async (dispatch) => {
     toogleUser(dispatch, userId, SamAPI.unfollowUser.bind(SamAPI), unfollow);
 }
 
