@@ -1,5 +1,6 @@
 import { stopSubmit } from "redux-form";
 import SamServices from "../API/SamAPI";
+import { responceApiCodes } from "../Types/responceApiCodes";
 
 const SET_USER_DATA = 'auth/SET_USER_DATA';
 const GET_CAPCTHA_URL = 'auth/GET_CAPCTHA_URL';
@@ -60,7 +61,7 @@ export const setAuthUserData = (userId: number | null, email: string | null, log
 
 export const getAuthUserData = () => async (dispatch: any) => {
     const responce = await SamAPI.authorization();
-    if (responce.resultCode === 0) {
+    if (responce.resultCode === responceApiCodes.Success) {
         dispatch(setAuthUserData(responce.data.id, responce.data.email, responce.data.login, true));
     }
 }
@@ -69,10 +70,10 @@ export const getAuthUserData = () => async (dispatch: any) => {
 export const login = (email: string, password: string, rememberMe: boolean, captcha: string) => async (dispatch:any) => {
     const responce = await SamAPI.login(email, password, rememberMe, captcha);
 
-    if (responce.resultCode === 0) {
+    if (responce.resultCode === responceApiCodes.Success) {
         dispatch(getAuthUserData());
     } else {
-        if(responce.resultCode === 10){
+        if(responce.resultCode === responceApiCodes.CaptchaIsRequired){
             dispatch(getCaptcha());
         }
         let message = responce.messages.length > 0 ? responce.messages[0] : 'Some error';
@@ -83,7 +84,7 @@ export const login = (email: string, password: string, rememberMe: boolean, capt
 export const logout = () => async (dispatch:any) => {
     const responce = await SamAPI.logout();
 
-    if (responce.resultCode === 0) {
+    if (responce.resultCode === responceApiCodes.Success) {
         dispatch(setAuthUserData(null, null, null, false))
     }
 }
