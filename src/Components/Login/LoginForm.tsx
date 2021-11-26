@@ -1,10 +1,11 @@
 import React from 'react';
 import { Form, Button, Alert } from 'react-bootstrap';
-import { reduxForm, Field } from 'redux-form';
+import { reduxForm, Field, InjectedFormProps } from 'redux-form';
 import styled from 'styled-components';
 import { Checkbox } from '../App/FormFields/Checkbox';
 import { Input } from '../App/FormFields/Input';
 import { requiredField } from '../App/Helpers/Validators';
+import { LoginFormValuesType } from './Login';
 
 const LoginFormStyles = styled.div`
     padding: 0 50px;
@@ -26,7 +27,11 @@ const LoginFormStyles = styled.div`
     
 `
 
-const LoginForm = ({error, handleSubmit, captchaUrl}) => {
+type LoginGormOwnPropsType = {
+    captchaUrl: string | null
+}
+
+const LoginForm: React.FC<InjectedFormProps<LoginFormValuesType, LoginGormOwnPropsType> & LoginGormOwnPropsType> = ({error, handleSubmit, captchaUrl}) => {
     return (
         <LoginFormStyles>
             <Form onSubmit={handleSubmit}>
@@ -44,4 +49,4 @@ const LoginForm = ({error, handleSubmit, captchaUrl}) => {
     )
 }
 
-export default reduxForm({form: 'login'})(LoginForm);
+export default reduxForm<LoginFormValuesType, LoginGormOwnPropsType>({form: 'login'})(LoginForm);

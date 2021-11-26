@@ -67,7 +67,7 @@ export const getAuthUserData = () => async (dispatch: any) => {
 }
 
 
-export const login = (email: string, password: string, rememberMe: boolean, captcha: string) => async (dispatch:any) => {
+export const login = (email: string, password: string, rememberMe: boolean, captcha: string | null) => async (dispatch:any) => {
     const responce = await SamAPI.login(email, password, rememberMe, captcha);
 
     if (responce.resultCode === responceApiCodes.Success) {
