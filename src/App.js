@@ -17,6 +17,8 @@ const Login = React.lazy(() => import('./Components/Login/Login'));
 const MainWrapper = styled.div`
     min-height: 100vh;
     border: 1px solid gray;
+    border-top: none;
+    border-bottom: none;
     /* background-color: #f7f7f7; */
 `
 

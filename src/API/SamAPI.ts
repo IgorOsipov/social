@@ -1,5 +1,5 @@
 import { profileType } from "../Types/types"
-import { authLoginType, authLogoutType, authMeType } from "./SamApiTypes";
+import { apiResponceType, authLoginResponceType, authMeResponceType, getUsersResponceType, noDataResponceType, savePhotoResponceType, } from "./SamApiTypes";
 
 
 export default class SamServices {
@@ -24,22 +24,22 @@ export default class SamServices {
 
     getUserProfile = async (id: number) => {
         const res = await this.getResoure(`profile/${id}`);
-        return res;
+        return res as Promise<profileType>;
     }
 
     getStatus = async (userId: number) => {
         const res = await this.getResoure(`profile/status/${userId}`);
-        return res;
+        return res as Promise<string>;
     }
 
     getCaptcha = async () => {
         const res = await this.getResoure(`security/get-captcha-url`);
-        return res;
+        return res as Promise<{url: string}>;
     }
 
     getUsers = async (page: number, pageSize: number) => {
         const res = await this.getResoure(`users?page=${page}&count=${pageSize}`);
-        return res;
+        return res as Promise<getUsersResponceType>;
     }
 
     updateStatus = async (status: string) => {
@@ -54,14 +54,14 @@ export default class SamServices {
             },
             credentials: 'include'
         });
-        return res.json();
+        return res.json() as Promise<noDataResponceType & apiResponceType>;
     }
 
     authorization = async () => {
         const res = await fetch(`${this._apiBase}auth/me`, {
             credentials: 'include'
         });
-        return res.json() as Promise<authMeType>;
+        return res.json() as Promise<authMeResponceType & apiResponceType>;
     }
 
     login = async (email: string, password: string, rememberMe = false, captcha: null | string = null) => {
@@ -80,7 +80,7 @@ export default class SamServices {
             credentials: 'include'
         });
 
-        return res.json() as Promise<authLoginType>;
+        return res.json() as Promise<authLoginResponceType & apiResponceType>;
     } 
 
     logout = async () => {
@@ -92,7 +92,7 @@ export default class SamServices {
             credentials: 'include'
         });
 
-        return res.json() as Promise<authLogoutType>;
+        return res.json() as Promise<noDataResponceType & apiResponceType>;
     }
 
     followUser = async (userId: number) => {
@@ -104,7 +104,7 @@ export default class SamServices {
             credentials: 'include'
         });
 
-        return res.json();
+        return res.json() as Promise<noDataResponceType & apiResponceType>;
     }
 
     unfollowUser = async (userId: number) => {
@@ -116,7 +116,7 @@ export default class SamServices {
             credentials: 'include'
         });
 
-        return res.json();
+        return res.json() as Promise<noDataResponceType & apiResponceType>;
     }
 
     savePhoto = async (image: any) => {
@@ -131,7 +131,7 @@ export default class SamServices {
             },
             credentials: 'include'
         });
-        return res.json();
+        return res.json() as Promise<savePhotoResponceType & apiResponceType>;
     }
 
     saveProfile = async (profile: profileType) => {
@@ -144,7 +144,7 @@ export default class SamServices {
             },
             credentials: 'include'
         });
-        return res.json();
+        return res.json() as Promise<noDataResponceType & apiResponceType>;
     }
     
 }

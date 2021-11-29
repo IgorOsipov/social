@@ -1,26 +1,41 @@
 import { responceApiCodes } from "../Types/responceApiCodes"
+import { usersType } from "../Types/types"
 
-export type authMeType = {
+export type authMeResponceType = {
     data: {
         id: number
         email: string
         login: string
     }
-    resultCode: responceApiCodes
-    messages: Array<string> 
 }
 
-export type authLoginType = {
+export type authLoginResponceType = {
     data: {
         userId: number
     }
-    resultCode: responceApiCodes
-    messages: Array<string> 
 }
 
-export type authLogoutType = {
-    data: {}
+export type getUsersResponceType = {
+    items: Array<usersType>
+    totalCount: number
+    error: string
+}
+
+export type apiResponceType = {
     resultCode: responceApiCodes
-    messages: Array<string> 
+    messages: Array<string>
+}
+
+export type noDataResponceType = {
+    data: {}
+}
+
+export type savePhotoResponceType = {
+    data: {
+        photos: {
+            large: string
+            small: string
+        }
+    }
 }
 
