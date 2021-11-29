@@ -107,19 +107,18 @@ type setPhotoSuccessActionType = {
 export const setPhotoSuccess = (photos: photosType):setPhotoSuccessActionType => ({type: SET_PHOTO_SUCCESS, photos});
 
 export const getProfile = (id: number) => async (dispatch: any) => {
-    dispatch(setPreloaderStatus(true))
-    const responce = await SamAPI.getUserProfile(id)
-
-    dispatch(setUserProfile(responce))
-    dispatch(setPreloaderStatus(false))
+    dispatch(setPreloaderStatus(true));
+    const responce = await SamAPI.getUserProfile(id);
+    dispatch(setUserProfile(responce));
+    dispatch(setPreloaderStatus(false));
 
 }
 
 
 export const getStatus = (id: number) => async (dispatch: any) => {
-    const responce = await SamAPI.getStatus(id)
+    const responce = await SamAPI.getStatus(id);
 
-    dispatch(setStatus(responce))
+    dispatch(setStatus(responce));
 }
 
 
