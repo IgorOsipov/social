@@ -18,4 +18,4 @@ const PreloaderImage = () => {
     
 }
 
-export default PreloaderImage
+export default PreloaderImage;
