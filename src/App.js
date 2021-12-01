@@ -19,7 +19,6 @@ const MainWrapper = styled.div`
     border: 1px solid gray;
     border-top: none;
     border-bottom: none;
-    /* background-color: #f7f7f7; */
 `
 
 class App extends React.Component {

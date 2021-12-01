@@ -1,5 +1,4 @@
-const ADD_MESSAGE = 'dialogs/ADD-MESSAGE';
-
+import { InferActionsTypes } from "./store";
 
 type dialogsDataType = {
     id: number
@@ -24,12 +23,13 @@ const initialState = {
 }
 
 export type initialStateType = typeof initialState;
+type ActionsType = InferActionsTypes<typeof actions>
 
-const dialogsReducer = (state = initialState, action: any):initialStateType  => {
+const dialogsReducer = (state = initialState, action: ActionsType):initialStateType  => {
 
     switch (action.type) {
 
-        case ADD_MESSAGE:
+        case 'SN/DIALOGS/ADD-MESSAGE':
             let newMessage = {
                 id: state.messagesData.length + 1,
                 message: action.newPost
@@ -44,10 +44,9 @@ const dialogsReducer = (state = initialState, action: any):initialStateType  => 
     }
 }
 
-type addMessageActionType = {
-    type: typeof ADD_MESSAGE
-    newPost: string
+export const actions = {
+    addMessage: (newPost: string) => ({ type: 'SN/DIALOGS/ADD-MESSAGE', newPost } as const)
 }
-export const addMessage = (newPost: string): addMessageActionType => ({ type: ADD_MESSAGE, newPost });
+
 
 export default dialogsReducer;

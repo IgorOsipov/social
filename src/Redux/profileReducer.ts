@@ -1,13 +1,8 @@
-import { stopSubmit } from "redux-form";
+import { FormAction, stopSubmit } from "redux-form";
 import SamServices from "../API/SamAPI";
+import { responceApiCodes } from "../Types/responceApiCodes";
 import { photosType, postsType, profileType } from "../Types/types";
-
-const ADD_POST = 'profile/ADD-POST';
-const DELETE_POST = 'profile/DELETE_POST';
-const SET_USER_PROFILE = 'profile/SET_USER_PROFILE';
-const SET_STATUS = 'profile/SET_STATUS';
-const SET_PRELOADER_STATUS = 'profile/SET_PRELOADER_STATUS';
-const SET_PHOTO_SUCCESS = 'profile/SET_PHOTO_SUCCESS'
+import { BaseThunkType, InferActionsTypes } from "./store";
 
 const SamAPI = new SamServices()
 
@@ -25,11 +20,13 @@ const initialState = {
 }
 
 export type initialStateType = typeof initialState;
+type ActionsTypes = InferActionsTypes<typeof actions>;
+type ThunkType = BaseThunkType<ActionsTypes | FormAction>;
 
-const profileReducer = (state = initialState, action: any):initialStateType => {
+const profileReducer = (state = initialState, action: ActionsTypes):initialStateType => {
 
     switch (action.type) {
-        case ADD_POST:
+        case 'SN/PROFILE/ADD-POST':
             let newPost = {
                 id: state.posts.length + 1,
                 message: action.text
@@ -39,31 +36,31 @@ const profileReducer = (state = initialState, action: any):initialStateType => {
                 posts: [...state.posts, newPost]
             }
 
-        case DELETE_POST:
+        case 'SN/PROFILE/DELETE_POST':
             return {
                 ...state,
                 posts: state.posts.filter(p => p.id !== action.id)
             }
 
-        case SET_USER_PROFILE:
+        case 'SN/PROFILE/SET_USER_PROFILE':
             return {
                 ...state,
                 profile: action.profile
             }
 
-        case SET_STATUS:
+        case 'SN/PROFILE/SET_STATUS':
             return {
                 ...state,
                 status: action.status
             }
 
-        case SET_PRELOADER_STATUS:
+        case 'SN/PROFILE/SET_PRELOADER_STATUS':
             return {
                 ...state,
                 preload: action.status
             }
         
-        case SET_PHOTO_SUCCESS: 
+        case 'SN/PROFILE/SET_PHOTO_SUCCESS': 
             return{
                 ...state,
                 profile: {...state.profile, photos: action.photos} as profileType
@@ -75,85 +72,67 @@ const profileReducer = (state = initialState, action: any):initialStateType => {
 
 }
 
-type addPostActionType = {
-    type: typeof ADD_POST,
-    text: string
+export const actions = {
+    addPost: (text: string) => ({ type: 'SN/PROFILE/ADD-POST', text } as const),
+    deletePost: (id: number) => ({ type: 'SN/PROFILE/DELETE_POST', id } as const),
+    setUserProfile: (profile: profileType) => ({ type: 'SN/PROFILE/SET_USER_PROFILE', profile } as const),
+    setStatus: (status: string) => ({ type: 'SN/PROFILE/SET_STATUS', status } as const),
+    setPreloaderStatus: (status: boolean) => ({ type: 'SN/PROFILE/SET_PRELOADER_STATUS', status } as const),
+    setPhotoSuccess: (photos: photosType) => ({type: 'SN/PROFILE/SET_PHOTO_SUCCESS', photos} as const)
 }
-export const addPost = (text: string):addPostActionType => ({ type: ADD_POST, text });
-type deletePostActionType = {
-    type: typeof DELETE_POST
-    id: number
-}
-export const deletePost = (id: number):deletePostActionType => ({ type: DELETE_POST, id });
-type setUserProfileActionType = {
-    type: typeof SET_USER_PROFILE
-    profile: profileType
-}
-export const setUserProfile = (profile: profileType):setUserProfileActionType => ({ type: SET_USER_PROFILE, profile });
-type setStatusActionType = {
-    type: typeof SET_STATUS
-    status: string
-}
-export const setStatus = (status: string):setStatusActionType => ({ type: SET_STATUS, status });
-type setPreloaderStatusActionType = {
-    type: typeof SET_PRELOADER_STATUS
-    status: boolean
-}
-export const setPreloaderStatus = (status: boolean):setPreloaderStatusActionType => ({ type: SET_PRELOADER_STATUS, status });
-type setPhotoSuccessActionType = {
-    type: typeof SET_PHOTO_SUCCESS
-    photos: photosType
-}
-export const setPhotoSuccess = (photos: photosType):setPhotoSuccessActionType => ({type: SET_PHOTO_SUCCESS, photos});
 
-export const getProfile = (id: number) => async (dispatch: any) => {
-    dispatch(setPreloaderStatus(true));
+export const getProfile = (id: number): ThunkType => async (dispatch) => {
+    dispatch(actions.setPreloaderStatus(true));
     const responce = await SamAPI.getUserProfile(id);
-    dispatch(setUserProfile(responce));
-    dispatch(setPreloaderStatus(false));
+    dispatch(actions.setUserProfile(responce));
+    dispatch(actions.setPreloaderStatus(false));
 
 }
 
 
-export const getStatus = (id: number) => async (dispatch: any) => {
+export const getStatus = (id: number): ThunkType => async (dispatch) => {
     const responce = await SamAPI.getStatus(id);
 
-    dispatch(setStatus(responce));
+    dispatch(actions.setStatus(responce));
 }
 
 
-export const updateStatus = (status: string) => async (dispatch: any) => {
+export const updateStatus = (status: string): ThunkType => async (dispatch) => {
     const responce = await SamAPI.updateStatus(status);
     
     if (responce.resultCode !== 0) {
-        dispatch(setStatus(''));
+        dispatch(actions.setStatus(''));
     }
 }
 
-export const savePhoto = (file: any) => async (dispatch: any) => {
-    dispatch(setPreloaderStatus(true));
+export const savePhoto = (file: File): ThunkType => async (dispatch) => {
+    dispatch(actions.setPreloaderStatus(true));
     const responce = await SamAPI.savePhoto(file);
     
-    if (responce.resultCode === 0) {
-        dispatch(setPhotoSuccess(responce.data.photos));
+    if (responce.resultCode === responceApiCodes.Success) {
+        dispatch(actions.setPhotoSuccess(responce.data.photos));
     }
-    dispatch(setPreloaderStatus(false));
+    dispatch(actions.setPreloaderStatus(false));
 }
 
-export const saveProfile = (profile: profileType) => async (dispatch: any, getState: any) => {
+export const saveProfile = (profile: profileType): ThunkType => async (dispatch, getState) => {
     const userId = getState().auth.userId;
 
-    dispatch(setPreloaderStatus(true));
+    dispatch(actions.setPreloaderStatus(true));
     const responce = await SamAPI.saveProfile(profile);
 
-    if (responce.resultCode === 0) {
-        dispatch(getProfile(userId));
+    if (responce.resultCode === responceApiCodes.Success) {
+        if(userId != null){
+            dispatch(getProfile(userId));
+        }else{
+            throw new Error("userId can't be null");
+        }
     }else{
         dispatch(stopSubmit('updateProfile', {_error: responce.messages[0]}));
-        dispatch(setPreloaderStatus(false));
+        dispatch(actions.setPreloaderStatus(false));
         return Promise.reject(responce.messages[0]);
     }
-    dispatch(setPreloaderStatus(false));
+    dispatch(actions.setPreloaderStatus(false));
 }
 
 export default profileReducer;

@@ -1,9 +1,8 @@
 import { Dispatch } from "redux";
-import { ThunkAction } from "redux-thunk";
 import SamServices from "../API/SamAPI";
 import { updateObjectInArray } from "../Components/App/Helpers/Objects";
 import { usersType } from "../Types/types";
-import { AppStateType, InferActionsTypes } from "./store";
+import { BaseThunkType, InferActionsTypes, } from "./store";
 
 const SamAPI = new SamServices();
 
@@ -17,6 +16,8 @@ const initialState = {
 }
 
 type initialStateType = typeof initialState;
+type ActionsTypes = InferActionsTypes<typeof actions>;
+type ThunkType = BaseThunkType<ActionsTypes>;
 
 const usersReducer = (state = initialState, action: ActionsTypes): initialStateType => {
 
@@ -67,7 +68,7 @@ const usersReducer = (state = initialState, action: ActionsTypes): initialStateT
 
 }
 
-type ActionsTypes = InferActionsTypes<typeof actions>;
+
 
 export const actions = {
     follow: (userID: number) => ({ type: 'FOLLOW', userID } as const),
@@ -79,8 +80,6 @@ export const actions = {
     toggleFollowingInProgress: (isFetching: boolean, userID: number) => ({ type: 'TOGGLE_IS_FOLLOWING_PROGRESS', isFetching, userID } as const)
 }
 
-
-type ThunkType = ThunkAction<Promise<void>, AppStateType, unknown, ActionsTypes>;
 export const requestUsers = (currentPage: number, pageSize: number): ThunkType => {
     return async (dispatch) => {
         dispatch(actions.toggleIsFetching(true));
