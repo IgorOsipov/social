@@ -1,6 +1,10 @@
 import React from 'react';
 
-const Message = (props) => {
+type PropsType = {
+    message: string | null
+}
+
+const Message: React.FC<PropsType> = (props) => {
     return (
         <li>{props.message}</li>
     )

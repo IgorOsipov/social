@@ -3,22 +3,16 @@ import { connect } from 'react-redux';
 import Dialog from './Dialog';
 import { withAuthRedirect } from '../HOC/WithAuthRedirect';
 import { compose } from 'redux';
+import { AppStateType } from '../../Redux/store';
 
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state: AppStateType) => {
     return {
-        state: state.dialogsPage
-    }
-}
-const mapDispatchToProps = (dispatch) => {
-    return {
-        sendMessage: (newMessage) => {
-            dispatch(actions.addMessage(newMessage))
-        }
+        dialogsPage: state.dialogsPage
     }
 }
 
 export default compose(
-    connect(mapStateToProps, mapDispatchToProps),
+    connect(mapStateToProps, { ...actions }),
     withAuthRedirect
 )(Dialog)
