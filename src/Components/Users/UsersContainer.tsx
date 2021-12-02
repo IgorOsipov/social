@@ -83,4 +83,4 @@ export default compose(
     //<TStateProps = {}, TDispatchProps = {}, TOwnProps = {}, State = DefaultState>
     connect<MapStatePropsType, MapDispatchPropsType, {}, AppStateType>(mapStateToProps, { followUser, unfollowUser, requestUsers }),
     withAuthRedirect
-)(UsersContainer)
+)(UsersContainer) as React.ComponentType

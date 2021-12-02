@@ -6,6 +6,7 @@ import styled from 'styled-components';
 import { initializeApp } from './Redux/appReducer';
 import HeaderContainer from "./Components/Header/HeaderContainer";
 import { LinearProgress } from '@material-ui/core';
+import { AppStateType } from './Redux/store';
 const DialogContainer = React.lazy(() => import('./Components/Dialogs/DialogContainer'));
 const ProfileContainer = React.lazy(() => import('./Components/Profile/ProfileContainer'));
 const UsersContainer = React.lazy(() => import('./Components/Users/UsersContainer'));
@@ -20,8 +21,11 @@ const MainWrapper = styled.div`
     border-top: none;
     border-bottom: none;
 `
-
-class App extends React.Component {
+type MapPropsType = ReturnType<typeof mapStateToProps>
+type DispatchPropsType = {
+  initializeApp: () => void
+}
+class App extends React.Component<MapPropsType & DispatchPropsType> {
 
   componentDidMount() {
     this.props.initializeApp();
@@ -52,7 +56,7 @@ class App extends React.Component {
   }
 }
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = (state: AppStateType) => ({
   initialized: state.app.initialized
 })
 
