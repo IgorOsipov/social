@@ -100,7 +100,7 @@ export const getStatus = (id: number): ThunkType => async (dispatch) => {
 export const updateStatus = (status: string): ThunkType => async (dispatch) => {
     const responce = await SamAPI.updateStatus(status);
     
-    if (responce.resultCode !== 0) {
+    if (responce.resultCode !== responceApiCodes.Success) {
         dispatch(actions.setStatus(''));
     }
 }

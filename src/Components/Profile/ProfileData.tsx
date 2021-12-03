@@ -2,6 +2,7 @@ import { Button } from 'react-bootstrap';
 import React from 'react';
 import styled from 'styled-components';
 import Contact from './Contact';
+import { profileContactsType, profileType } from '../../Types/types';
 
 const ProfileDataStyles = styled.div`
     margin-top: .5rem;
@@ -25,7 +26,13 @@ const ProfileDataStyles = styled.div`
     }
 `
 
-const ProfileData = ({profile, isOwner, setEditProfileDataMode}) => {
+type ProfileDataPropsType = {
+    profile: profileType
+    isOwner: boolean
+    setEditProfileDataMode: React.Dispatch<React.SetStateAction<boolean>>
+}
+
+const ProfileData: React.FC<ProfileDataPropsType> = ({profile, isOwner, setEditProfileDataMode}) => {
     return (
         <ProfileDataStyles>
             <div>
@@ -39,7 +46,7 @@ const ProfileData = ({profile, isOwner, setEditProfileDataMode}) => {
             <div>
                 <strong>Contacts:</strong>
                 {Object.keys(profile.contacts).map(key => {
-                    return <Contact key={key} contactTitle={key} contactValue={profile.contacts[key]} />
+                    return <Contact key={key} contactTitle={key} contactValue={profile.contacts[key as keyof profileContactsType]} />
                 })}
             </div>
         </ProfileDataStyles>

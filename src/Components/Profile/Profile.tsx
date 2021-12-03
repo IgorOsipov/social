@@ -1,15 +1,26 @@
-import React, { useState } from 'react';
+import React, { ChangeEvent, useState } from 'react';
 import { Row, Col } from 'react-bootstrap';
 import avatar from '../../Img/no-avatar.png';
+import { profileType } from '../../Types/types';
 import PreloaderImage from '../App/Preloader/Preloader';
 import MyPostsContainer from './MyPosts/MyPostsContainer';
 import ProfileData from './ProfileData';
 import ProfileDataForm from './ProfileDataForm';
 import ProfileStatus from './ProfileStatus';
 
+type PropsType = {
+    profile: profileType | null
+    status: string
+    preloader: boolean 
+    isAuth: boolean
+    userId: number | null
+    isOwner: boolean
+    savePhoto: (file: File) => void
+    saveProfile: (formData: profileType) => Promise<any>
+    updateStatus: (status: string) => void
+}
 
-
-const Profile = ({ profile, status, updateStatus, preloader, isAuth, userId, isOwner, savePhoto, saveProfile }) => {
+const Profile: React.FC<PropsType> = ({ profile, status, updateStatus, preloader, isAuth, userId, isOwner, savePhoto, saveProfile }) => {
 
     const [editProfileDataMode, setEditProfileDataMode] = useState(false);
 
@@ -17,14 +28,14 @@ const Profile = ({ profile, status, updateStatus, preloader, isAuth, userId, isO
         return <PreloaderImage />
     }
 
-    const onNewPhotoSelected = (e) => {
-        if (e.target.files.length) {
+    const onNewPhotoSelected = (e: ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files?.length) {
 
             savePhoto(e.target.files[0]);
         }
     }
 
-    const onSubmit = (formData) => {
+    const onSubmit = (formData: profileType) => {
         saveProfile(formData).then(() => {
             setEditProfileDataMode(false);
         });

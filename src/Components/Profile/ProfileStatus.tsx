@@ -15,7 +15,15 @@ const StatusStyles = styled.div`
     }
 `
 
-const ProfileStatus = (props) => {
+type PropsType = {
+    status: string
+    updateStatus: (status: string) => void
+    isAuth: boolean
+    isOwner: boolean
+    userId: number | null
+}
+
+const ProfileStatus: React.FC<PropsType> = (props) => {
 
     const [editMode, setEditMode] = useState(false);
     const [status, setStatus] = useState(props.status);
