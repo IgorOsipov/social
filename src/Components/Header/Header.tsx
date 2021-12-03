@@ -2,15 +2,10 @@ import React from 'react';
 import { Nav, Navbar, NavDropdown } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 import logo from '../../Img/logo.png';
+import { PropsType as HeaderPropsType } from './HeaderContainer';
 
-type PropsType = {
-    isAuth: boolean
-    userId: number | null
-    login: string | null
-    logout: () => void
-}
 
-const Header: React.FC<PropsType> = (props) => {
+const Header: React.FC<HeaderPropsType> = (props) => {
     return (
         <Navbar sticky="top" bg="dark" variant="dark" expand="lg">
             <Navbar.Brand href="#home">

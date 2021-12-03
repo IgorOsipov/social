@@ -14,7 +14,9 @@ type MapPropsType = {
     logout: () => void
 }
 
-class HeaderContainer extends React.Component<StatePropsType & MapPropsType> {
+export type PropsType = StatePropsType & MapPropsType
+
+class HeaderContainer extends React.Component<PropsType> {
     render() {
         return <Header {...this.props} />
     }
