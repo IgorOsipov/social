@@ -1,6 +1,8 @@
 import { Dispatch } from "redux";
 import SamServices from "../API/SamAPI";
+import { apiResponceType, noDataResponceType } from "../API/SamApiTypes";
 import { updateObjectInArray } from "../Components/App/Helpers/Objects";
+import { responceApiCodes } from "../Types/responceApiCodes";
 import { usersType } from "../Types/types";
 import { BaseThunkType, InferActionsTypes, } from "./store";
 
@@ -15,7 +17,7 @@ const initialState = {
     followingInProgress: [] as Array<number> //array of users id
 }
 
-type initialStateType = typeof initialState;
+export type initialStateType = typeof initialState;
 type ActionsTypes = InferActionsTypes<typeof actions>;
 type ThunkType = BaseThunkType<ActionsTypes>;
 
@@ -91,13 +93,13 @@ export const requestUsers = (currentPage: number, pageSize: number): ThunkType =
     }
 }
 
-const toogleUser = async (dispatch: Dispatch<ActionsTypes>, userId: number, apiMethod: any, actionCreator:(userId: number) => ActionsTypes) => {
+const toogleUser = async (dispatch: Dispatch<ActionsTypes>, userId: number, apiMethod: (userId: number) => Promise<apiResponceType & noDataResponceType>, actionCreator:(userId: number) => ActionsTypes) => {
     dispatch(actions.toggleFollowingInProgress(true, userId));
     const responce = await apiMethod(userId);
 
-    if (responce.resultCode === 0) {
+    if (responce.resultCode === responceApiCodes.Success) {
         dispatch(actionCreator(userId));
-    } else if (responce.resultCode === 1) {
+    } else if (responce.resultCode === responceApiCodes.Error) {
         dispatch(actions.toggleIsFetching(false));
     }
 
@@ -105,11 +107,11 @@ const toogleUser = async (dispatch: Dispatch<ActionsTypes>, userId: number, apiM
 }
 
 export const followUser = (userId: number): ThunkType => async (dispatch) => {
-    toogleUser(dispatch, userId, SamAPI.followUser.bind(SamAPI), actions.follow);
+    await toogleUser(dispatch, userId, SamAPI.followUser.bind(SamAPI), actions.follow);
 }
 
 export const unfollowUser = (userId: number): ThunkType => async (dispatch) => {
-    toogleUser(dispatch, userId, SamAPI.unfollowUser.bind(SamAPI), actions.unfollow);
+    await toogleUser(dispatch, userId, SamAPI.unfollowUser.bind(SamAPI), actions.unfollow);
 }
 
 export default usersReducer;
