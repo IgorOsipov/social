@@ -37,8 +37,8 @@ export default class SamServices {
         return res as Promise<{url: string}>;
     }
 
-    getUsers = async (page: number, pageSize: number) => {
-        const res = await this.getResoure(`users?page=${page}&count=${pageSize}`);
+    getUsers = async (page: number, pageSize: number, term: string = '', friend: null | boolean = null) => {
+        const res = await this.getResoure(`users?page=${page}&count=${pageSize}&term=${term}` + (friend === null ? '' : `&friend=${friend}`));
         return res as Promise<getUsersResponceType>;
     }
 

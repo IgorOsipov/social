@@ -3,6 +3,8 @@ import styled from 'styled-components';
 import ReactPaginate from 'react-paginate';
 import User from './User';
 import { usersType } from '../../Types/types';
+import UsersSearchForm from './UsersSearchForm';
+import { FilterType } from '../../Redux/usersReducer';
 
 const CardStyle = styled.div`
     display: flex;
@@ -56,6 +58,7 @@ type Props = {
     onFollowClick: (userId: number) => void
     onUnfollowClick: (userId: number) => void
     onPageChanged: (p: { selected: number }) => void
+    onFilterChanged: (filter: FilterType) => void
     pageSize: number
     totalUsersCount: number
     isAuth: boolean
@@ -64,11 +67,12 @@ type Props = {
 }
 
 
-const Users: React.FC<Props> = ({ userId, users, followingInProgress, onFollowClick, onUnfollowClick, onPageChanged, pageSize, totalUsersCount, isAuth, currentPage }) => {
+const Users: React.FC<Props> = ({ userId, users, followingInProgress, onFilterChanged, onFollowClick, onUnfollowClick, onPageChanged, pageSize, totalUsersCount, isAuth, currentPage }) => {
     return (
         <CardStyle>
+            <UsersSearchForm onFilterChanged={onFilterChanged} />
             <ReactPaginate
-                initialPage={currentPage - 1}
+                forcePage={currentPage - 1}
                 breakLabel="..."
                 nextLabel=">"
                 previousLabel="<"
