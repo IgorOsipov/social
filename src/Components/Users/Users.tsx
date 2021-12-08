@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import ReactPaginate from 'react-paginate';
 import User from './User';
 import UsersSearchForm from './UsersSearchForm';
-import { FilterType, requestUsers } from '../../Redux/usersReducer';
+import { actions, FilterType, requestUsers } from '../../Redux/usersReducer';
 import { useDispatch, useSelector } from 'react-redux';
 import { getCurrentPage, getIsFetching, getPageSize, getTotalUsersCount, getUsers, getUsersFilter } from '../../Redux/usersSelectors';
 import PreloaderImage from '../App/Preloader/Preloader';
@@ -72,15 +72,17 @@ const Users: React.FC<Props> = () => {
 
     const dispatch = useDispatch();
 
+    
     useEffect(() => {
         dispatch(requestUsers(currentPage, pageSize, filter));
-    }, []);
+        // eslint-disable-next-line
+    }, [currentPage, pageSize, filter.term, filter.friend]);
 
     const onPageChanged = (p: { selected: number }) => {
-        dispatch(requestUsers(p.selected + 1, pageSize, filter));
+        dispatch(actions.setCurrentPage(p.selected + 1));
     }
     const onFilterChanged = (filter: FilterType) => {
-        dispatch(requestUsers(1, pageSize, filter));
+        dispatch(actions.setFilter(filter));
     }
 
     return (
