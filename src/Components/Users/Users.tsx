@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import ReactPaginate from 'react-paginate';
 import User from './User';
-import { usersType } from '../../Types/types';
 import UsersSearchForm from './UsersSearchForm';
-import { FilterType } from '../../Redux/usersReducer';
+import { FilterType, requestUsers } from '../../Redux/usersReducer';
+import { useDispatch, useSelector } from 'react-redux';
+import { getCurrentPage, getIsFetching, getPageSize, getTotalUsersCount, getUsers, getUsersFilter } from '../../Redux/usersSelectors';
+import PreloaderImage from '../App/Preloader/Preloader';
 
 const CardStyle = styled.div`
     display: flex;
@@ -50,59 +52,70 @@ const CardStyle = styled.div`
         }
         
     }
+
+    .pagination{
+        cursor: pointer;
+    }
 `
 
-type Props = {
-    users: Array<usersType>
-    followingInProgress: Array<number>
-    onFollowClick: (userId: number) => void
-    onUnfollowClick: (userId: number) => void
-    onPageChanged: (p: { selected: number }) => void
-    onFilterChanged: (filter: FilterType) => void
-    pageSize: number
-    totalUsersCount: number
-    isAuth: boolean
-    userId: number | null
-    currentPage: number
-}
+type Props = {}
 
 
-const Users: React.FC<Props> = ({ userId, users, followingInProgress, onFilterChanged, onFollowClick, onUnfollowClick, onPageChanged, pageSize, totalUsersCount, isAuth, currentPage }) => {
+const Users: React.FC<Props> = () => {
+    
+    const totalUsersCount = useSelector(getTotalUsersCount);
+    const currentPage = useSelector(getCurrentPage);
+    const pageSize = useSelector(getPageSize);
+    const users = useSelector(getUsers);
+    const filter = useSelector(getUsersFilter);
+    const isFetching = useSelector(getIsFetching);
+
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        dispatch(requestUsers(currentPage, pageSize, filter));
+    }, []);
+
+    const onPageChanged = (p: { selected: number }) => {
+        dispatch(requestUsers(p.selected + 1, pageSize, filter));
+    }
+    const onFilterChanged = (filter: FilterType) => {
+        dispatch(requestUsers(1, pageSize, filter));
+    }
+
     return (
-        <CardStyle>
-            <UsersSearchForm onFilterChanged={onFilterChanged} />
-            <ReactPaginate
-                forcePage={currentPage - 1}
-                breakLabel="..."
-                nextLabel=">"
-                previousLabel="<"
-                onPageChange={onPageChanged}
-                pageRangeDisplayed={5}
-                marginPagesDisplayed={1}
-                pageCount={Math.ceil(totalUsersCount / pageSize)}
-                pageClassName="page-item"
-                pageLinkClassName="page-link"
-                previousClassName="page-item"
-                previousLinkClassName="page-link"
-                nextClassName="page-item"
-                nextLinkClassName="page-link"
-                breakClassName="page-item"
-                breakLinkClassName="page-link"
-                containerClassName="pagination"
-                activeClassName="active"
-            />
-            {
-                users.map((u) => <User
-                    key={u.id}
-                    user={u}
-                    onFollowClick={onFollowClick}
-                    onUnfollowClick={onUnfollowClick}
-                    followingInProgress={followingInProgress}
-                    isAuth={isAuth}
-                    userId={userId}
-                />)
-            }
-        </CardStyle>
+        <>
+            {isFetching ? <PreloaderImage /> : null}
+            <CardStyle>
+                <UsersSearchForm onFilterChanged={onFilterChanged} />
+                <ReactPaginate
+                    forcePage={currentPage - 1}
+                    breakLabel="..."
+                    nextLabel=">"
+                    previousLabel="<"
+                    onPageChange={onPageChanged}
+                    pageRangeDisplayed={5}
+                    marginPagesDisplayed={1}
+                    pageCount={Math.ceil(totalUsersCount / pageSize)}
+                    pageClassName="page-item"
+                    pageLinkClassName="page-link"
+                    previousClassName="page-item"
+                    previousLinkClassName="page-link"
+                    nextClassName="page-item"
+                    nextLinkClassName="page-link"
+                    breakClassName="page-item"
+                    breakLinkClassName="page-link"
+                    containerClassName="pagination"
+                    activeClassName="active"
+                />
+                {
+                    users.map((u) => <User
+                        key={u.id}
+                        user={u}
+                    />)
+                }
+            </CardStyle>
+        </>
     )
 }
 

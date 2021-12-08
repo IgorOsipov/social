@@ -9,7 +9,7 @@ import { LinearProgress } from '@material-ui/core';
 import { AppStateType } from './Redux/store';
 const DialogContainer = React.lazy(() => import('./Components/Dialogs/DialogContainer'));
 const ProfileContainer = React.lazy(() => import('./Components/Profile/ProfileContainer'));
-const UsersContainer = React.lazy(() => import('./Components/Users/UsersContainer'));
+const Users = React.lazy(() => import('./Components/Users/Users'));
 const Settings = React.lazy(() => import('./Components/Settings/Settings'));
 const News = React.lazy(() => import('./Components/News/News'));
 const Music = React.lazy(() => import('./Components/Music/Music'));
@@ -43,7 +43,7 @@ class App extends React.Component<MapPropsType & DispatchPropsType> {
                 <Route exact path='/'><Redirect to='/profile'/></Route>
                 <Route exact path='/profile/:id?' render={() => <Suspense fallback={<LinearProgress />}> <ProfileContainer /> </Suspense>} />
                 <Route path='/dialogs' render={() => <Suspense fallback={<LinearProgress />}> <DialogContainer /> </Suspense>} />
-                <Route path='/users' render={() => <Suspense fallback={<LinearProgress />}> <UsersContainer /> </Suspense>} />
+                <Route path='/users' render={() => <Suspense fallback={<LinearProgress />}> <Users /> </Suspense>} />
                 <Route path='/news' render={() => <Suspense fallback={<LinearProgress />}> <News /> </Suspense>} />
                 <Route path='/music' render={() => <Suspense fallback={<LinearProgress />}> <Music /> </Suspense>} />
                 <Route path='/settings' render={() => <Suspense fallback={<LinearProgress />}> <Settings /> </Suspense>} />
