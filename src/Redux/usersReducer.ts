@@ -54,7 +54,8 @@ const usersReducer = (state = initialState, action: ActionsTypes): initialStateT
         case 'SN/USERS/SET_FILTER':
             return {
                 ...state, 
-                filter: action.payload
+                filter: action.payload,
+                currentPage: 1
             }
 
         case 'SN/USERS/SET_TOTAL_COUNT':

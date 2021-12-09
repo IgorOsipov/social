@@ -1,7 +1,18 @@
 import React from 'react';
-import { Formik, Form, Field } from 'formik';
+import { Formik } from 'formik';
 import { FilterType } from '../../Redux/usersReducer';
+import { Button, Col, Form, Row } from 'react-bootstrap';
+import styled from 'styled-components';
 
+
+const FormStyle = styled.div`
+    width: 80%;
+    form{
+        .form-group{
+            padding: 0 5px 0 5px;
+        }
+    }
+`
 
 
 type PropsType = {
@@ -19,7 +30,7 @@ const UsersSearchForm: React.FC<PropsType> = (props) => {
         friend: 'null' | 'true' | 'false'
     }
 
-    const submit = (values: ValuesType,  { setSubmitting }: {setSubmitting: (isSubmitting: boolean) => void }) => {
+    const submit = (values: ValuesType, { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }) => {
         const filter: FilterType = {
             term: values.term,
             friend: values.friend === 'null' ? null : values.friend === 'true' ? true : false
@@ -31,22 +42,38 @@ const UsersSearchForm: React.FC<PropsType> = (props) => {
 
     return (
         <Formik
-            initialValues={{ term: '', friend: "null"}}
+            initialValues={{ term: '', friend: "null" }}
             validate={usersSearchFormValidate}
             onSubmit={submit}
         >
-            {({ isSubmitting }) => (
-                <Form>
-                    <Field type="text" name="term" />
-                    <Field name="friend" as="select">
-                        <option value='null' >All</option>
-                        <option value='true'>Followed only</option>
-                        <option value='false'>Unfollowed only</option>
-                    </Field>
-                    <button type="submit" disabled={isSubmitting}>
-                        Find
-                    </button>
-                </Form>
+            {({ isSubmitting, handleSubmit, handleChange }) => (
+                <FormStyle>
+                    <Form onSubmit={handleSubmit}>
+                        {/* <Field type='text' name='term' />
+                        <Field name="friend" as="select">
+                            <option value='null' >All</option>
+                            <option value='true'>Followed only</option>
+                            <option value='false'>Unfollowed only</option>
+                        </Field>
+                        <button type="submit" disabled={isSubmitting}>
+                            Find
+                        </button> */}
+
+                        <Row>
+                            <Form.Group as={Col} sm='7'>
+                                <Form.Control onChange={handleChange} type='text' name='term' placeholder='Type to find user' />
+                            </Form.Group>
+                            <Form.Group as={Col} sm='3'>
+                                <Form.Control as='select' name='friend' onChange={handleChange}>
+                                    <option value='null' >All</option>
+                                    <option value='true'>Followed only</option>
+                                    <option value='false'>Unfollowed only</option>
+                                </Form.Control>
+                            </Form.Group>
+                            <Form.Group as={Col} sm='2'><Button disabled={isSubmitting} type="submit">Find</Button></Form.Group>
+                        </Row>
+                    </Form>
+                </FormStyle>
             )}
         </Formik>
     )
