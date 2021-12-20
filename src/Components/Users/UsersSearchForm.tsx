@@ -4,7 +4,6 @@ import { FilterType } from '../../Redux/usersReducer';
 import { Button, Col, Form, Row } from 'react-bootstrap';
 import styled from 'styled-components';
 
-
 const FormStyle = styled.div`
     width: 80%;
     form{
@@ -17,6 +16,7 @@ const FormStyle = styled.div`
 
 type PropsType = {
     onFilterChanged: (filter: FilterType) => void
+    filter: FilterType
 }
 
 const UsersSearchForm: React.FC<PropsType> = (props) => {
@@ -33,7 +33,8 @@ const UsersSearchForm: React.FC<PropsType> = (props) => {
     const submit = (values: ValuesType, { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }) => {
         const filter: FilterType = {
             term: values.term,
-            friend: values.friend === 'null' ? null : values.friend === 'true' ? true : false
+            //friend: values.friend === 'null' ? null : values.friend === 'true' ? true : false
+            friend: values.friend as any
         }
 
         props.onFilterChanged(filter);
@@ -42,11 +43,11 @@ const UsersSearchForm: React.FC<PropsType> = (props) => {
 
     return (
         <Formik
-            initialValues={{ term: '', friend: "null" }}
+            initialValues={{ term: props.filter.term, friend: props.filter.friend as any }}
             validate={usersSearchFormValidate}
             onSubmit={submit}
         >
-            {({ isSubmitting, handleSubmit, handleChange }) => (
+            {({ isSubmitting, handleSubmit, handleChange, values }) => (
                 <FormStyle>
                     <Form onSubmit={handleSubmit}>
                         {/* <Field type='text' name='term' />
@@ -61,11 +62,11 @@ const UsersSearchForm: React.FC<PropsType> = (props) => {
 
                         <Row>
                             <Form.Group as={Col} sm='7'>
-                                <Form.Control onChange={handleChange} type='text' name='term' placeholder='Type to find user' />
+                                <Form.Control onChange={handleChange} type='text' value={values.term} name='term' placeholder='Type to find user' />
                             </Form.Group>
                             <Form.Group as={Col} sm='3'>
-                                <Form.Control as='select' name='friend' onChange={handleChange}>
-                                    <option value='null' >All</option>
+                                <Form.Control as='select' name='friend' value={values.friend} onChange={handleChange}>
+                                    <option value='null'>All</option>
                                     <option value='true'>Followed only</option>
                                     <option value='false'>Unfollowed only</option>
                                 </Form.Control>

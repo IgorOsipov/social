@@ -51,11 +51,15 @@ const usersReducer = (state = initialState, action: ActionsTypes): initialStateT
                 ...state, currentPage: action.currentPage
             }
 
+        case 'SN/USERS/SET_PAGE_SIZE':
+            return {
+                ...state, pageSize: action.size
+            }
+
         case 'SN/USERS/SET_FILTER':
             return {
-                ...state, 
-                filter: action.payload,
-                currentPage: 1
+                ...state,
+                filter: action.payload
             }
 
         case 'SN/USERS/SET_TOTAL_COUNT':
@@ -88,8 +92,9 @@ export const actions = {
     follow: (userID: number) => ({ type: 'SN/USERS/FOLLOW', userID } as const),
     unfollow: (userID: number) => ({ type: 'SN/USERS/UNFOLLOW', userID } as const),
     setUsers: (users: Array<usersType>) => ({ type: 'SN/USERS/SET_USERS', users } as const),
+    setPageSize: (size: number) => ({ type: 'SN/USERS/SET_PAGE_SIZE', size } as const),
     setCurrentPage: (currentPage: number) => ({ type: 'SN/USERS/SET_CURRENT_PAGE', currentPage } as const),
-    setFilter: (filter: FilterType) => ({ type: 'SN/USERS/SET_FILTER', payload:  filter } as const),
+    setFilter: (filter: FilterType) => ({ type: 'SN/USERS/SET_FILTER', payload: filter } as const),
     setTotalCount: (totalCount: number) => ({ type: 'SN/USERS/SET_TOTAL_COUNT', totalCount } as const),
     toggleIsFetching: (isFetching: boolean) => ({ type: 'SN/USERS/TOGGLE_IS_FETCHING', isFetching } as const),
     toggleFollowingInProgress: (isFetching: boolean, userID: number) => ({ type: 'SN/USERS/TOGGLE_IS_FOLLOWING_PROGRESS', isFetching, userID } as const)

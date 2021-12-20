@@ -7,6 +7,8 @@ import { actions, FilterType, requestUsers } from '../../Redux/usersReducer';
 import { useDispatch, useSelector } from 'react-redux';
 import { getCurrentPage, getIsFetching, getPageSize, getTotalUsersCount, getUsers, getUsersFilter } from '../../Redux/usersSelectors';
 import PreloaderImage from '../App/Preloader/Preloader';
+import { useHistory } from 'react-router-dom';
+import * as queryString from 'querystring';
 
 const CardStyle = styled.div`
     display: flex;
@@ -70,11 +72,30 @@ const Users: React.FC<Props> = () => {
     const filter = useSelector(getUsersFilter);
     const isFetching = useSelector(getIsFetching);
 
+    const history = useHistory();
+
     const dispatch = useDispatch();
 
-    
+
+    useEffect(()=>{
+        const parsed = queryString.parse(history.location.search.substr(1)) as {term: string, page: string, size: string, friend: string};
+
+        let actualFilter = {...filter}
+        if(!!parsed.page) currentPage !== Number(parsed.page) && dispatch(actions.setCurrentPage(Number(parsed.page)));
+        if(!!parsed.term) actualFilter.term !== parsed.term && dispatch(actions.setFilter({...actualFilter, term: parsed.term}));
+        if(!!parsed.friend) actualFilter.friend !== parsed.friend as any && dispatch(actions.setFilter({...actualFilter, friend: parsed.friend as any}));
+        if(!!parsed.size) pageSize !== Number(parsed.size) && dispatch(actions.setPageSize(Number(parsed.size)));
+    },[])
+
     useEffect(() => {
+        console.log(currentPage);
+        console.log(pageSize);
+        console.log(filter);
         dispatch(requestUsers(currentPage, pageSize, filter));
+        history.push({
+            pathname: '/users',
+            search: `?page=${currentPage}&size=${pageSize}&term=${filter.term}&friend=${filter.friend}`
+        });
         // eslint-disable-next-line
     }, [currentPage, pageSize, filter.term, filter.friend]);
 
@@ -89,7 +110,7 @@ const Users: React.FC<Props> = () => {
         <>
             {isFetching ? <PreloaderImage /> : null}
             <CardStyle>
-                <UsersSearchForm onFilterChanged={onFilterChanged} />
+                <UsersSearchForm filter={filter} onFilterChanged={onFilterChanged} />
                 <ReactPaginate
                     forcePage={currentPage - 1}
                     breakLabel="..."
