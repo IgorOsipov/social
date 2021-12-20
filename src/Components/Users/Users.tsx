@@ -89,9 +89,6 @@ const Users: React.FC<Props> = () => {
     },[])
 
     useEffect(() => {
-        console.log(currentPage);
-        console.log(pageSize);
-        console.log(filter);
         dispatch(requestUsers(currentPage, pageSize, filter));
         history.push({
             pathname: '/users',
