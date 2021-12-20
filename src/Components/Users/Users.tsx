@@ -85,6 +85,7 @@ const Users: React.FC<Props> = () => {
         if(!!parsed.term) actualFilter.term !== parsed.term && dispatch(actions.setFilter({...actualFilter, term: parsed.term}));
         if(!!parsed.friend) actualFilter.friend !== parsed.friend as any && dispatch(actions.setFilter({...actualFilter, friend: parsed.friend as any}));
         if(!!parsed.size) pageSize !== Number(parsed.size) && dispatch(actions.setPageSize(Number(parsed.size)));
+        // eslint-disable-next-line
     },[])
 
     useEffect(() => {
