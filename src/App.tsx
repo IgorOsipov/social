@@ -1,11 +1,10 @@
 import React, { Suspense } from 'react';
-import { Container } from "react-bootstrap";
 import { connect } from 'react-redux';
 import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom';
 import styled from 'styled-components';
 import { initializeApp } from './Redux/appReducer';
 import HeaderContainer from "./Components/Header/HeaderContainer";
-import { LinearProgress } from '@material-ui/core';
+import { Container, LinearProgress } from '@material-ui/core';
 import { AppStateType } from './Redux/store';
 const DialogContainer = React.lazy(() => import('./Components/Dialogs/DialogContainer'));
 const ProfileContainer = React.lazy(() => import('./Components/Profile/ProfileContainer'));
@@ -37,7 +36,7 @@ class App extends React.Component<MapPropsType & DispatchPropsType> {
     return (
       <BrowserRouter>
         <HeaderContainer />
-        <Container>
+        <Container maxWidth="lg">
           <MainWrapper>
             <Switch>
               <Route exact path='/'><Redirect to='/profile' /></Route>
