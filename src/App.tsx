@@ -1,4 +1,4 @@
-import React, {Suspense} from 'react';
+import React, { Suspense } from 'react';
 import { Container } from "react-bootstrap";
 import { connect } from 'react-redux';
 import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom';
@@ -31,8 +31,8 @@ class App extends React.Component<MapPropsType & DispatchPropsType> {
     this.props.initializeApp();
   }
 
-  render(){
-    if(!this.props.initialized) return <LinearProgress />
+  render() {
+    if (!this.props.initialized) return <LinearProgress />
 
     return (
       <BrowserRouter>
@@ -40,14 +40,15 @@ class App extends React.Component<MapPropsType & DispatchPropsType> {
         <Container>
           <MainWrapper>
             <Switch>
-                <Route exact path='/'><Redirect to='/profile'/></Route>
-                <Route exact path='/profile/:id?' render={() => <Suspense fallback={<LinearProgress />}> <ProfileContainer /> </Suspense>} />
-                <Route path='/dialogs' render={() => <Suspense fallback={<LinearProgress />}> <DialogContainer /> </Suspense>} />
-                <Route path='/users' render={() => <Suspense fallback={<LinearProgress />}> <Users /> </Suspense>} />
-                <Route path='/news' render={() => <Suspense fallback={<LinearProgress />}> <News /> </Suspense>} />
-                <Route path='/music' render={() => <Suspense fallback={<LinearProgress />}> <Music /> </Suspense>} />
-                <Route path='/settings' render={() => <Suspense fallback={<LinearProgress />}> <Settings /> </Suspense>} />
-                <Route path='/login' render={() => <Suspense fallback={<LinearProgress />}> <Login /> </Suspense>} />              
+              <Route exact path='/'><Redirect to='/profile' /></Route>
+              <Route exact path='/profile/:id?' render={() => <Suspense fallback={<LinearProgress />}> <ProfileContainer /> </Suspense>} />
+              <Route path='/dialogs' render={() => <Suspense fallback={<LinearProgress />}> <DialogContainer /> </Suspense>} />
+              <Route path='/users' render={() => <Suspense fallback={<LinearProgress />}> <Users /> </Suspense>} />
+              <Route path='/news' render={() => <Suspense fallback={<LinearProgress />}> <News /> </Suspense>} />
+              <Route path='/music' render={() => <Suspense fallback={<LinearProgress />}> <Music /> </Suspense>} />
+              <Route path='/settings' render={() => <Suspense fallback={<LinearProgress />}> <Settings /> </Suspense>} />
+              <Route path='/login' render={() => <Suspense fallback={<LinearProgress />}> <Login /> </Suspense>} />
+              <Route path='*' render={() => <div>404 NOT FOUND</div>} />
             </Switch>
           </MainWrapper>
         </Container>

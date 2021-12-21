@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
-import ReactPaginate from 'react-paginate';
 import User from './User';
 import UsersSearchForm from './UsersSearchForm';
 import { actions, FilterType, requestUsers } from '../../Redux/usersReducer';
@@ -9,6 +8,7 @@ import { getCurrentPage, getIsFetching, getPageSize, getTotalUsersCount, getUser
 import PreloaderImage from '../App/Preloader/Preloader';
 import { useHistory } from 'react-router-dom';
 import * as queryString from 'querystring';
+import { Pagination } from '@mui/material';
 
 const CardStyle = styled.div`
     display: flex;
@@ -97,8 +97,8 @@ const Users: React.FC<Props> = () => {
         // eslint-disable-next-line
     }, [currentPage, pageSize, filter.term, filter.friend]);
 
-    const onPageChanged = (p: { selected: number }) => {
-        dispatch(actions.setCurrentPage(p.selected + 1));
+    const onPageChanged = (event: React.ChangeEvent<unknown>, page: number) => {
+        dispatch(actions.setCurrentPage(page));
     }
     const onFilterChanged = (filter: FilterType) => {
         dispatch(actions.setFilter(filter));
@@ -109,25 +109,15 @@ const Users: React.FC<Props> = () => {
             {isFetching ? <PreloaderImage /> : null}
             <CardStyle>
                 <UsersSearchForm filter={filter} onFilterChanged={onFilterChanged} />
-                <ReactPaginate
-                    forcePage={currentPage - 1}
-                    breakLabel="..."
-                    nextLabel=">"
-                    previousLabel="<"
-                    onPageChange={onPageChanged}
-                    pageRangeDisplayed={5}
-                    marginPagesDisplayed={1}
-                    pageCount={Math.ceil(totalUsersCount / pageSize)}
-                    pageClassName="page-item"
-                    pageLinkClassName="page-link"
-                    previousClassName="page-item"
-                    previousLinkClassName="page-link"
-                    nextClassName="page-item"
-                    nextLinkClassName="page-link"
-                    breakClassName="page-item"
-                    breakLinkClassName="page-link"
-                    containerClassName="pagination"
-                    activeClassName="active"
+                <Pagination 
+                    page={currentPage}
+                    count={Math.ceil(totalUsersCount / pageSize)}
+                    onChange={onPageChanged}
+                    siblingCount={2}
+                    shape='rounded'
+                    color='primary'
+                    size='large'
+                    sx={{marginBottom: '1rem'}}
                 />
                 {
                     users.map((u) => <User
