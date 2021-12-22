@@ -1,11 +1,11 @@
-import React, { Suspense } from 'react';
-import { connect } from 'react-redux';
+import React, { Suspense, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom';
-import styled from 'styled-components';
 import { initializeApp } from './Redux/appReducer';
 import HeaderContainer from "./Components/Header/HeaderContainer";
-import { Container, LinearProgress } from '@material-ui/core';
-import { AppStateType } from './Redux/store';
+import { Container, LinearProgress, makeStyles, Paper } from '@material-ui/core';
+import Chat from './Components/App/Chat/Chat';
+import { getIsInitialized } from './Redux/appSelectors';
 const DialogContainer = React.lazy(() => import('./Components/Dialogs/DialogContainer'));
 const ProfileContainer = React.lazy(() => import('./Components/Profile/ProfileContainer'));
 const Users = React.lazy(() => import('./Components/Users/Users'));
@@ -14,51 +14,48 @@ const News = React.lazy(() => import('./Components/News/News'));
 const Music = React.lazy(() => import('./Components/Music/Music'));
 const Login = React.lazy(() => import('./Components/Login/Login'));
 
-const MainWrapper = styled.div`
-    min-height: 100vh;
-    border: 1px solid gray;
-    border-top: none;
-    border-bottom: none;
-`
-type MapPropsType = ReturnType<typeof mapStateToProps>
-type DispatchPropsType = {
-  initializeApp: () => void
+const useStyle = makeStyles({
+    root: {
+      minHeight: '94vh'
+    }
+});
+    
+const App = () => {
+
+  const classes = useStyle();
+
+  const isInitialized = useSelector(getIsInitialized);
+
+  const dispatch = useDispatch();
+
+  useEffect(()=>{
+    dispatch(initializeApp());
+  })
+
+  return (
+    isInitialized ? 
+    <BrowserRouter>
+      <HeaderContainer />
+      <Container maxWidth="lg">
+        <Paper elevation={12} className={classes.root}>
+          <Switch>
+            <Route exact path='/'><Redirect to='/profile' /></Route>
+            <Route exact path='/profile/:id?' render={() => <Suspense fallback={<LinearProgress />}> <ProfileContainer /> </Suspense>} />
+            <Route path='/dialogs' render={() => <Suspense fallback={<LinearProgress />}> <DialogContainer /> </Suspense>} />
+            <Route path='/users' render={() => <Suspense fallback={<LinearProgress />}> <Users /> </Suspense>} />
+            <Route path='/news' render={() => <Suspense fallback={<LinearProgress />}> <News /> </Suspense>} />
+            <Route path='/music' render={() => <Suspense fallback={<LinearProgress />}> <Music /> </Suspense>} />
+            <Route path='/settings' render={() => <Suspense fallback={<LinearProgress />}> <Settings /> </Suspense>} />
+            <Route path='/login' render={() => <Suspense fallback={<LinearProgress />}> <Login /> </Suspense>} />
+            <Route path='*' render={() => <div>404 NOT FOUND</div>} />
+          </Switch>
+        </Paper>
+      </Container>
+      <Chat />
+    </BrowserRouter>
+    : <LinearProgress />
+  );
 }
-class App extends React.Component<MapPropsType & DispatchPropsType> {
 
-  componentDidMount() {
-    this.props.initializeApp();
-  }
 
-  render() {
-    if (!this.props.initialized) return <LinearProgress />
-
-    return (
-      <BrowserRouter>
-        <HeaderContainer />
-        <Container maxWidth="lg">
-          <MainWrapper>
-            <Switch>
-              <Route exact path='/'><Redirect to='/profile' /></Route>
-              <Route exact path='/profile/:id?' render={() => <Suspense fallback={<LinearProgress />}> <ProfileContainer /> </Suspense>} />
-              <Route path='/dialogs' render={() => <Suspense fallback={<LinearProgress />}> <DialogContainer /> </Suspense>} />
-              <Route path='/users' render={() => <Suspense fallback={<LinearProgress />}> <Users /> </Suspense>} />
-              <Route path='/news' render={() => <Suspense fallback={<LinearProgress />}> <News /> </Suspense>} />
-              <Route path='/music' render={() => <Suspense fallback={<LinearProgress />}> <Music /> </Suspense>} />
-              <Route path='/settings' render={() => <Suspense fallback={<LinearProgress />}> <Settings /> </Suspense>} />
-              <Route path='/login' render={() => <Suspense fallback={<LinearProgress />}> <Login /> </Suspense>} />
-              <Route path='*' render={() => <div>404 NOT FOUND</div>} />
-            </Switch>
-          </MainWrapper>
-        </Container>
-      </BrowserRouter>
-    );
-  }
-}
-
-const mapStateToProps = (state: AppStateType) => ({
-  initialized: state.app.initialized
-})
-
-export default connect(mapStateToProps, { initializeApp })(App)
-
+export default App;
