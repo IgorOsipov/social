@@ -6,6 +6,7 @@ import HeaderContainer from "./Components/Header/HeaderContainer";
 import { Container, LinearProgress, makeStyles, Paper } from '@material-ui/core';
 import Chat from './Components/App/Chat/Chat';
 import { getIsInitialized } from './Redux/appSelectors';
+import { getIsAuth } from './Redux/authSelectors';
 const DialogContainer = React.lazy(() => import('./Components/Dialogs/DialogContainer'));
 const ProfileContainer = React.lazy(() => import('./Components/Profile/ProfileContainer'));
 const Users = React.lazy(() => import('./Components/Users/Users'));
@@ -25,6 +26,7 @@ const App = () => {
   const classes = useStyle();
 
   const isInitialized = useSelector(getIsInitialized);
+  const isAuth = useSelector(getIsAuth);
 
   const dispatch = useDispatch();
 
@@ -51,7 +53,7 @@ const App = () => {
           </Switch>
         </Paper>
       </Container>
-      <Chat />
+      {isAuth && <Chat />}
     </BrowserRouter>
     : <LinearProgress />
   );
