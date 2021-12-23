@@ -1,17 +1,37 @@
-import { useState } from 'react';
-import { Badge, Paper, IconButton, Divider } from '@mui/material';
+import { useEffect, useState } from 'react';
+import { Badge, Paper, Divider, Fab } from '@mui/material';
 import ChatIcon from '@mui/icons-material/Chat';
 import Messages from './Messages/Messages';
 import InputMessage from './InputMessage/InputMessage';
 
+const ws = new WebSocket('wss://social-network.samuraijs.com/handlers/ChatHandler.ashx');
+
+export type ChatMessageType = {
+    message: string
+    photo: string
+    userId: number
+    userName: string
+}
 
 const Chat = () => {
 
     const [isOpen, setIsOpen] = useState(false);
+    const [messages, setMessages] = useState<ChatMessageType[]>([]);
 
     const onChatButtonClick = () => {
         setIsOpen(!isOpen);
     }
+
+    const sendMessage = (newMessage: string) => {
+        ws.send(newMessage);
+    }
+
+    useEffect(() => {
+        ws.addEventListener('message', (e: MessageEvent) => {
+            const newMessage = JSON.parse(e.data);
+            setMessages((prevMessages) => [...prevMessages, ...newMessage]);
+        });
+    },[]);
 
     return (
         <>
@@ -27,29 +47,24 @@ const Chat = () => {
                     flexDirection: "column"
                 }}
             >
-                <Messages />
+                <Messages messages={messages} />
                 <Divider />
-                <InputMessage />
+                <InputMessage sendMessage={sendMessage} />
             </Paper>}
-            <IconButton
+            <Fab
+                size="large"
+                color="primary"
                 onClick={onChatButtonClick}
                 sx={{
                     position: 'fixed',
-                    backgroundColor: 'info.main',
                     right: 50,
-                    bottom: 40,
-                    height: 50,
-                    width: 50,
-                    boxShadow: '0px 3px 3px -2px rgba(0,0,0,0.2),0px 3px 4px 0px rgba(0,0,0,0.14),0px 1px 8px 0px rgba(0,0,0,0.12)',
-                    '&:hover': {
-                        backgroundColor: 'primary.main'
-                    }
+                    bottom: 30,
                 }}
             >
-                <Badge badgeContent={4} color="error">
-                    <ChatIcon sx={{ color: '#fff' }} />
+                <Badge badgeContent={0} color="error">
+                    <ChatIcon />
                 </Badge>
-            </IconButton>
+            </Fab>
         </>
     )
 }

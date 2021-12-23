@@ -2,14 +2,20 @@ import { Box, IconButton, TextField } from "@mui/material";
 import { useFormik } from "formik";
 import SendIcon from '@mui/icons-material/Send';
 
-const InputMessage = () => {
+type PropsType = {
+    sendMessage: (newMessage: string) => void
+}
+
+const InputMessage: React.FC<PropsType> = ({sendMessage}) => {
 
     const formik = useFormik({
         initialValues: {
             message: ''
         },
         onSubmit: (values) => {
-            alert(values.message);
+            if(!values.message) return;
+            sendMessage(values.message);
+            formik.values.message = '';
         }
     });
 
