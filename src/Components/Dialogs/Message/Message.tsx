@@ -1,13 +1,11 @@
-import React from 'react';
+import React from "react";
 
 type PropsType = {
-    message: string | null
-}
+  message: string | null;
+};
 
 const Message: React.FC<PropsType> = (props) => {
-    return (
-        <li>{props.message}</li>
-    )
-}
+  return <li>{props.message}</li>;
+};
 
 export default Message;

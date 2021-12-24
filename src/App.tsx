@@ -3,10 +3,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom';
 import { initializeApp } from './Redux/appReducer';
 import HeaderContainer from "./Components/Header/HeaderContainer";
-import { Container, LinearProgress, makeStyles, Paper } from '@material-ui/core';
 import Chat from './Components/App/Chat/Chat';
 import { getIsInitialized } from './Redux/appSelectors';
 import { getIsAuth } from './Redux/authSelectors';
+import { Container, LinearProgress, Paper } from '@mui/material';
 const DialogContainer = React.lazy(() => import('./Components/Dialogs/DialogContainer'));
 const ProfileContainer = React.lazy(() => import('./Components/Profile/ProfileContainer'));
 const Users = React.lazy(() => import('./Components/Users/Users'));
@@ -15,15 +15,8 @@ const News = React.lazy(() => import('./Components/News/News'));
 const Music = React.lazy(() => import('./Components/Music/Music'));
 const Login = React.lazy(() => import('./Components/Login/Login'));
 
-const useStyle = makeStyles({
-    root: {
-      minHeight: '94vh'
-    }
-});
     
 const App = () => {
-
-  const classes = useStyle();
 
   const isInitialized = useSelector(getIsInitialized);
   const isAuth = useSelector(getIsAuth);
@@ -39,7 +32,7 @@ const App = () => {
     <BrowserRouter>
       <HeaderContainer />
       <Container maxWidth="lg">
-        <Paper elevation={12} className={classes.root}>
+        <Paper elevation={12} sx={{minHeight: '94vh'}}>
           <Switch>
             <Route exact path='/'><Redirect to='/profile' /></Route>
             <Route exact path='/profile/:id?' render={() => <Suspense fallback={<LinearProgress />}> <ProfileContainer /> </Suspense>} />
